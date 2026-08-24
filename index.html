@@ -3,11 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>ELGHO AI</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
+<!-- =========================
+     AUTH
+========================= -->
 
 <div id="authScreen" class="auth-screen">
 
@@ -16,24 +22,41 @@
     <div class="auth-logo">E</div>
 
     <h1>ELGHO AI</h1>
-    <p class="auth-subtitle">AI Assistant milikmu.</p>
+
+    <p class="auth-subtitle">
+      AI Assistant milikmu.
+    </p>
+
 
     <!-- LOGIN -->
 
     <div id="loginForm">
 
       <h2>Selamat datang 👋</h2>
-      <p class="form-info">Masuk ke akun ELGHO AI kamu.</p>
-      
-<button class="google-button" onclick="loginWithGoogle()">
-  <span>G</span>
-  Lanjutkan dengan Google
-</button>
 
-<div class="divider">
-  <span>atau</span>
-</div>
-      
+      <p class="form-info">
+        Masuk ke akun ELGHO AI kamu.
+      </p>
+
+
+      <!-- GOOGLE LOGIN -->
+
+      <button
+        class="google-button"
+        onclick="loginWithGoogle()"
+      >
+        <span>G</span>
+        Lanjutkan dengan Google
+      </button>
+
+
+      <div class="divider">
+        <span>atau</span>
+      </div>
+
+
+      <!-- EMAIL LOGIN -->
+
       <input
         type="email"
         id="loginEmail"
@@ -46,33 +69,58 @@
         placeholder="Password"
       >
 
-      <button class="auth-button" onclick="login()">
+
+      <button
+        class="auth-button"
+        onclick="login()"
+      >
         Masuk
       </button>
 
+
       <p class="switch-auth">
+
         Belum punya akun?
-        <button onclick="showRegister()">Daftar</button>
+
+        <button onclick="showRegister()">
+          Daftar
+        </button>
+
       </p>
 
     </div>
 
+
     <!-- REGISTER -->
 
-    <div id="registerForm" class="hidden">
+    <div
+      id="registerForm"
+      class="hidden"
+    >
 
       <h2>Buat akun 🚀</h2>
-      <p class="form-info">Daftar untuk mulai menggunakan ELGHO AI.</p>
 
-    <button class="google-button" onclick="loginWithGoogle()">
-  <span>G</span>
-  Daftar dengan Google
-</button>
+      <p class="form-info">
+        Daftar untuk mulai menggunakan ELGHO AI.
+      </p>
 
-<div class="divider">
-  <span>atau</span>
-</div>
-      
+
+      <!-- GOOGLE REGISTER -->
+
+      <button
+        class="google-button"
+        onclick="loginWithGoogle()"
+      >
+        <span>G</span>
+        Daftar dengan Google
+      </button>
+
+
+      <div class="divider">
+        <span>atau</span>
+      </div>
+
+
       <input
         type="text"
         id="registerName"
@@ -97,13 +145,23 @@
         placeholder="Konfirmasi password"
       >
 
-      <button class="auth-button" onclick="register()">
+
+      <button
+        class="auth-button"
+        onclick="register()"
+      >
         Daftar
       </button>
 
+
       <p class="switch-auth">
+
         Sudah punya akun?
-        <button onclick="showLogin()">Masuk</button>
+
+        <button onclick="showLogin()">
+          Masuk
+        </button>
+
       </p>
 
     </div>
@@ -113,85 +171,159 @@
 </div>
 
 
-<!-- APLIKASI -->
+<!-- =========================
+     APLIKASI
+========================= -->
 
-<div id="appScreen" class="hidden">
+<div
+  id="appScreen"
+  class="hidden"
+>
 
   <div class="app">
 
+
     <!-- SIDEBAR -->
 
-    <aside class="sidebar" id="sidebar">
+    <aside
+      class="sidebar"
+      id="sidebar"
+    >
 
       <div class="brand">
 
-        <div class="brand-logo">E</div>
+        <div class="brand-logo">
+          E
+        </div>
 
         <div>
+
           <h2>ELGHO AI</h2>
-          <span>AI Assistant</span>
+
+          <span>
+            AI Assistant
+          </span>
+
         </div>
 
       </div>
 
-      <button class="new-chat" onclick="openPage('chat')">
+
+      <button
+        class="new-chat"
+        onclick="openPage('chat')"
+      >
         ＋ Chat Baru
       </button>
 
+
       <nav>
 
-        <button class="nav-item active" onclick="openPage('home', this)">
+        <button
+          class="nav-item active"
+          onclick="openPage('home', this)"
+        >
           🏠 <span>Beranda</span>
         </button>
 
-        <button class="nav-item" onclick="openPage('chat', this)">
+
+        <button
+          class="nav-item"
+          onclick="openPage('chat', this)"
+        >
           💬 <span>Chat AI</span>
         </button>
 
-        <button class="nav-item" onclick="openPage('image', this)">
+
+        <button
+          class="nav-item"
+          onclick="openPage('image', this)"
+        >
           🖼️ <span>Generate Gambar</span>
         </button>
 
-        <button class="nav-item" onclick="openPage('video', this)">
+
+        <button
+          class="nav-item"
+          onclick="openPage('video', this)"
+        >
           🎬 <span>Generate Video</span>
         </button>
 
-        <button class="nav-item" onclick="openPage('website', this)">
+
+        <button
+          class="nav-item"
+          onclick="openPage('website', this)"
+        >
           🌐 <span>Buat Website</span>
         </button>
 
-        <button class="nav-item" onclick="openPage('app', this)">
+
+        <button
+          class="nav-item"
+          onclick="openPage('app', this)"
+        >
           📱 <span>Buat Aplikasi</span>
         </button>
 
-        <button class="nav-item" onclick="openPage('history', this)">
+
+        <button
+          class="nav-item"
+          onclick="openPage('history', this)"
+        >
           🕘 <span>Riwayat</span>
         </button>
 
-        <button class="nav-item" onclick="openPage('profile', this)">
+
+        <button
+          class="nav-item"
+          onclick="openPage('profile', this)"
+        >
           👤 <span>Profil</span>
         </button>
 
-        <button class="nav-item" onclick="openPage('settings', this)">
+
+        <button
+          class="nav-item"
+          onclick="openPage('settings', this)"
+        >
           ⚙️ <span>Pengaturan</span>
         </button>
 
       </nav>
 
+
       <div class="sidebar-bottom">
 
         <div class="user-box">
 
-          <div class="avatar" id="sidebarAvatar">L</div>
+          <div
+            class="avatar"
+            id="sidebarAvatar"
+          >
+            L
+          </div>
+
 
           <div>
-            <strong id="sidebarName">Pengguna</strong>
-            <small>Free Plan</small>
+
+            <strong id="sidebarName">
+              Pengguna
+            </strong>
+
+            <small>
+              Free Plan
+            </small>
+
           </div>
 
         </div>
 
-        <button class="logout-button" onclick="logout()">
+
+        <button
+          class="logout-button"
+          onclick="logout()"
+        >
           Keluar
         </button>
 
@@ -204,22 +336,42 @@
 
     <main class="main">
 
+
       <header class="topbar">
 
-        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <button
+          class="menu-btn"
+          onclick="toggleSidebar()"
+        >
+          ☰
+        </button>
+
 
         <div class="mobile-logo">
-          <strong>ELGHO AI</strong>
+
+          <strong>
+            ELGHO AI
+          </strong>
+
         </div>
 
-        <button class="theme-btn" onclick="toggleTheme()">☾</button>
+
+        <button
+          class="theme-btn"
+          onclick="toggleTheme()"
+        >
+          ☾
+        </button>
 
       </header>
 
 
       <!-- HOME -->
 
-      <section class="page active" id="home">
+      <section
+        class="page active"
+        id="home"
+      >
 
         <div class="hero">
 
@@ -227,18 +379,35 @@
             ✦ ELGHO AI
           </div>
 
+
           <h1>
-            Halo, <span id="welcomeName">Pengguna</span> 👋
+
+            Halo,
+            <span id="welcomeName">
+              Pengguna
+            </span>
+            👋
+
             <br>
+
             Apa yang ingin kamu buat?
+
           </h1>
 
+
           <p>
+
             Gunakan ELGHO AI untuk belajar,
-            membuat konten, mencari ide, dan berkarya.
+            membuat konten, mencari ide,
+            dan berkarya.
+
           </p>
 
-          <button class="primary-btn" onclick="openPage('chat')">
+
+          <button
+            class="primary-btn"
+            onclick="openPage('chat')"
+          >
             Mulai Chat →
           </button>
 
@@ -247,40 +416,94 @@
 
         <div class="quick-grid">
 
+
           <button onclick="openPage('chat')">
+
             <span>💬</span>
-            <strong>Chat dengan AI</strong>
-            <small>Tanya apa saja</small>
+
+            <strong>
+              Chat dengan AI
+            </strong>
+
+            <small>
+              Tanya apa saja
+            </small>
+
           </button>
+
 
           <button onclick="openPage('image')">
+
             <span>🖼️</span>
-            <strong>Generate Gambar</strong>
-            <small>Buat gambar dari prompt</small>
+
+            <strong>
+              Generate Gambar
+            </strong>
+
+            <small>
+              Buat gambar dari prompt
+            </small>
+
           </button>
+
 
           <button onclick="openPage('video')">
+
             <span>🎬</span>
-            <strong>Generate Video</strong>
-            <small>Buat video dengan AI</small>
+
+            <strong>
+              Generate Video
+            </strong>
+
+            <small>
+              Buat video dengan AI
+            </small>
+
           </button>
+
 
           <button onclick="openPage('website')">
+
             <span>🌐</span>
-            <strong>Buat Website</strong>
-            <small>Website dari prompt</small>
+
+            <strong>
+              Buat Website
+            </strong>
+
+            <small>
+              Website dari prompt
+            </small>
+
           </button>
+
 
           <button onclick="openPage('app')">
+
             <span>📱</span>
-            <strong>Buat Aplikasi</strong>
-            <small>Aplikasi dari ide kamu</small>
+
+            <strong>
+              Buat Aplikasi
+            </strong>
+
+            <small>
+              Aplikasi dari ide kamu
+            </small>
+
           </button>
 
+
           <button onclick="openPage('history')">
+
             <span>🕘</span>
-            <strong>Riwayat</strong>
-            <small>Lihat aktivitas kamu</small>
+
+            <strong>
+              Riwayat
+            </strong>
+
+            <small>
+              Lihat aktivitas kamu
+            </small>
+
           </button>
 
         </div>
@@ -290,27 +513,49 @@
 
       <!-- CHAT -->
 
-      <section class="page" id="chat">
+      <section
+        class="page"
+        id="chat"
+      >
 
         <div class="page-header">
-          <h1>💬 Chat AI</h1>
-          <p>Berbicara dengan ELGHO AI.</p>
+
+          <h1>
+            💬 Chat AI
+          </h1>
+
+          <p>
+            Berbicara dengan ELGHO AI.
+          </p>
+
         </div>
+
 
         <div class="chat-container">
 
-          <div class="chat-messages" id="chatMessages">
+
+          <div
+            class="chat-messages"
+            id="chatMessages"
+          >
 
             <div class="ai-message">
 
-              <div class="message-avatar">E</div>
+              <div class="message-avatar">
+                E
+              </div>
 
               <div>
-                <strong>ELGHO AI</strong>
+
+                <strong>
+                  ELGHO AI
+                </strong>
 
                 <p>
+
                   Halo! Saya ELGHO AI.
                   Ada yang bisa saya bantu?
+
                 </p>
 
               </div>
@@ -319,6 +564,7 @@
 
           </div>
 
+
           <div class="chat-input">
 
             <textarea
@@ -326,7 +572,12 @@
               placeholder="Tulis pesan untuk ELGHO AI..."
             ></textarea>
 
-            <button onclick="sendMessage()">➤</button>
+
+            <button
+              onclick="sendMessage()"
+            >
+              ➤
+            </button>
 
           </div>
 
@@ -337,12 +588,23 @@
 
       <!-- IMAGE -->
 
-      <section class="page" id="image">
+      <section
+        class="page"
+        id="image"
+      >
 
         <div class="page-header">
-          <h1>🖼️ Generate Gambar</h1>
-          <p>Buat gambar menggunakan prompt.</p>
+
+          <h1>
+            🖼️ Generate Gambar
+          </h1>
+
+          <p>
+            Buat gambar menggunakan prompt.
+          </p>
+
         </div>
+
 
         <div class="generator-card">
 
@@ -350,12 +612,21 @@
             placeholder="Contoh: Kota futuristik Indonesia pada malam hari..."
           ></textarea>
 
+
           <div class="generator-options">
 
             <select>
-              <option>HD</option>
-              <option>Standard</option>
+
+              <option>
+                HD
+              </option>
+
+              <option>
+                Standard
+              </option>
+
             </select>
+
 
             <button class="primary-btn">
               ✨ Generate
@@ -363,9 +634,17 @@
 
           </div>
 
+
           <div class="empty-result">
-            <span>🖼️</span>
-            <p>Hasil gambar akan muncul di sini.</p>
+
+            <span>
+              🖼️
+            </span>
+
+            <p>
+              Hasil gambar akan muncul di sini.
+            </p>
+
           </div>
 
         </div>
@@ -375,12 +654,23 @@
 
       <!-- VIDEO -->
 
-      <section class="page" id="video">
+      <section
+        class="page"
+        id="video"
+      >
 
         <div class="page-header">
-          <h1>🎬 Generate Video</h1>
-          <p>Buat video dari deskripsi.</p>
+
+          <h1>
+            🎬 Generate Video
+          </h1>
+
+          <p>
+            Buat video dari deskripsi.
+          </p>
+
         </div>
+
 
         <div class="generator-card">
 
@@ -388,15 +678,25 @@
             placeholder="Deskripsikan video yang ingin dibuat..."
           ></textarea>
 
+
           <div class="generator-options">
 
             <select>
 
-              <option>10 detik</option>
-              <option>30 detik</option>
-              <option>60 detik</option>
+              <option>
+                10 detik
+              </option>
+
+              <option>
+                30 detik
+              </option>
+
+              <option>
+                60 detik
+              </option>
 
             </select>
+
 
             <button class="primary-btn">
               🎬 Generate
@@ -404,9 +704,17 @@
 
           </div>
 
+
           <div class="empty-result">
-            <span>🎬</span>
-            <p>Hasil video akan muncul di sini.</p>
+
+            <span>
+              🎬
+            </span>
+
+            <p>
+              Hasil video akan muncul di sini.
+            </p>
+
           </div>
 
         </div>
@@ -416,12 +724,23 @@
 
       <!-- WEBSITE -->
 
-      <section class="page" id="website">
+      <section
+        class="page"
+        id="website"
+      >
 
         <div class="page-header">
-          <h1>🌐 Buat Website</h1>
-          <p>Ubah ide menjadi website.</p>
+
+          <h1>
+            🌐 Buat Website
+          </h1>
+
+          <p>
+            Ubah ide menjadi website.
+          </p>
+
         </div>
+
 
         <div class="generator-card">
 
@@ -429,13 +748,22 @@
             placeholder="Contoh: Buat website toko pakaian modern..."
           ></textarea>
 
+
           <button class="primary-btn">
             🚀 Buat Website
           </button>
 
+
           <div class="empty-result">
-            <span>🌐</span>
-            <p>Website yang dibuat AI akan muncul di sini.</p>
+
+            <span>
+              🌐
+            </span>
+
+            <p>
+              Website yang dibuat AI akan muncul di sini.
+            </p>
+
           </div>
 
         </div>
@@ -445,12 +773,23 @@
 
       <!-- APP -->
 
-      <section class="page" id="app">
+      <section
+        class="page"
+        id="app"
+      >
 
         <div class="page-header">
-          <h1>📱 Buat Aplikasi</h1>
-          <p>Buat konsep aplikasi menggunakan AI.</p>
+
+          <h1>
+            📱 Buat Aplikasi
+          </h1>
+
+          <p>
+            Buat konsep aplikasi menggunakan AI.
+          </p>
+
         </div>
+
 
         <div class="generator-card">
 
@@ -458,13 +797,22 @@
             placeholder="Contoh: Buat aplikasi belajar bahasa..."
           ></textarea>
 
+
           <button class="primary-btn">
             📱 Buat Aplikasi
           </button>
 
+
           <div class="empty-result">
-            <span>📱</span>
-            <p>Aplikasi yang dibuat AI akan muncul di sini.</p>
+
+            <span>
+              📱
+            </span>
+
+            <p>
+              Aplikasi yang dibuat AI akan muncul di sini.
+            </p>
+
           </div>
 
         </div>
@@ -474,22 +822,39 @@
 
       <!-- HISTORY -->
 
-      <section class="page" id="history">
+      <section
+        class="page"
+        id="history"
+      >
 
         <div class="page-header">
-          <h1>🕘 Riwayat</h1>
-          <p>Aktivitas kamu akan tersimpan di sini.</p>
+
+          <h1>
+            🕘 Riwayat
+          </h1>
+
+          <p>
+            Aktivitas kamu akan tersimpan di sini.
+          </p>
+
         </div>
+
 
         <div class="empty-state">
 
-          <span>🕘</span>
+          <span>
+            🕘
+          </span>
 
-          <h3>Belum ada riwayat</h3>
+          <h3>
+            Belum ada riwayat
+          </h3>
 
           <p>
+
             Mulai menggunakan ELGHO AI
             untuk melihat aktivitas.
+
           </p>
 
         </div>
@@ -499,11 +864,16 @@
 
       <!-- PROFILE -->
 
-      <section class="page" id="profile">
+      <section
+        class="page"
+        id="profile"
+      >
 
         <div class="page-header">
 
-          <h1>👤 Profil</h1>
+          <h1>
+            👤 Profil
+          </h1>
 
           <p>
             Kelola informasi akun kamu.
@@ -511,19 +881,26 @@
 
         </div>
 
+
         <div class="profile-card">
 
-          <div class="profile-avatar" id="profileAvatar">
+          <div
+            class="profile-avatar"
+            id="profileAvatar"
+          >
             L
           </div>
+
 
           <h2 id="profileName">
             Pengguna
           </h2>
 
+
           <p id="profileEmail">
             email@example.com
           </p>
+
 
           <div class="plan-badge">
             FREE PLAN
@@ -536,11 +913,16 @@
 
       <!-- SETTINGS -->
 
-      <section class="page" id="settings">
+      <section
+        class="page"
+        id="settings"
+      >
 
         <div class="page-header">
 
-          <h1>⚙️ Pengaturan</h1>
+          <h1>
+            ⚙️ Pengaturan
+          </h1>
 
           <p>
             Atur pengalaman ELGHO AI kamu.
@@ -548,14 +930,24 @@
 
         </div>
 
+
         <div class="settings-list">
+
 
           <div class="setting">
 
             <div>
-              <strong>Tampilan</strong>
-              <small>Mode terang / gelap</small>
+
+              <strong>
+                Tampilan
+              </strong>
+
+              <small>
+                Mode terang / gelap
+              </small>
+
             </div>
+
 
             <button onclick="toggleTheme()">
               Ubah
@@ -563,12 +955,21 @@
 
           </div>
 
+
           <div class="setting">
 
             <div>
-              <strong>Bahasa</strong>
-              <small>Bahasa Indonesia</small>
+
+              <strong>
+                Bahasa
+              </strong>
+
+              <small>
+                Bahasa Indonesia
+              </small>
+
             </div>
+
 
             <button>
               Indonesia
@@ -576,14 +977,25 @@
 
           </div>
 
+
           <div class="setting">
 
             <div>
-              <strong>Akun</strong>
-              <small>Free Plan</small>
+
+              <strong>
+                Akun
+              </strong>
+
+              <small>
+                Free Plan
+              </small>
+
             </div>
 
-            <button onclick="openPage('profile')">
+
+            <button
+              onclick="openPage('profile')"
+            >
               Profil
             </button>
 
@@ -599,7 +1011,13 @@
 
 </div>
 
-<<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- =========================
+     SUPABASE
+========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="script.js"></script>
 
 </body>
