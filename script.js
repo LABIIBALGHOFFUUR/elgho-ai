@@ -1,9 +1,9 @@
 /* =========================
-   SUPABASE
+   SUPABASE CONFIG
 ========================= */
 
-const SUPABASE_URL = "TEMPEL_PROJECT_URL_DI_SINI";
-const SUPABASE_PUBLISHABLE_KEY = "TEMPEL_SB_PUBLISHABLE_KEY_DI_SINI";
+const SUPABASE_URL = "MASUKKAN_PROJECT_URL_KAMU";
+const SUPABASE_PUBLISHABLE_KEY = "MASUKKAN_SB_PUBLISHABLE_KEY_KAMU";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
@@ -12,23 +12,31 @@ const supabaseClient = window.supabase.createClient(
 
 
 /* =========================
-   AUTH
+   AUTH SCREEN
 ========================= */
 
 function showRegister() {
 
-  document.getElementById("loginForm").classList.add("hidden");
+  document
+    .getElementById("loginForm")
+    .classList.add("hidden");
 
-  document.getElementById("registerForm").classList.remove("hidden");
+  document
+    .getElementById("registerForm")
+    .classList.remove("hidden");
 
 }
 
 
 function showLogin() {
 
-  document.getElementById("registerForm").classList.add("hidden");
+  document
+    .getElementById("registerForm")
+    .classList.add("hidden");
 
-  document.getElementById("loginForm").classList.remove("hidden");
+  document
+    .getElementById("loginForm")
+    .classList.remove("hidden");
 
 }
 
@@ -39,21 +47,70 @@ function showLogin() {
 
 async function loginWithGoogle() {
 
-  const { error } =
-    await supabaseClient.auth.signInWithOAuth({
+  try {
 
-      provider: "google",
+    if (!window.supabase) {
 
-      options: {
-        redirectTo: window.location.origin
-      }
+      alert(
+        "Supabase belum termuat. Periksa koneksi internet."
+      );
 
-    });
+      return;
+
+    }
 
 
-  if (error) {
+    if (!SUPABASE_URL ||
+        !SUPABASE_PUBLISHABLE_KEY) {
 
-    alert("Login Google gagal: " + error.message);
+      alert(
+        "Konfigurasi Supabase belum diisi."
+      );
+
+      return;
+
+    }
+
+
+    const { error } =
+      await supabaseClient.auth.signInWithOAuth({
+
+        provider: "google",
+
+        options: {
+
+          redirectTo:
+            window.location.origin
+
+        }
+
+      });
+
+
+    if (error) {
+
+      console.error(
+        "Google Login Error:",
+        error
+      );
+
+      alert(
+        "Login Google gagal:\n\n" +
+        error.message
+      );
+
+    }
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Terjadi kesalahan:\n\n" +
+      error.message
+    );
 
   }
 
@@ -61,21 +118,29 @@ async function loginWithGoogle() {
 
 
 /* =========================
-   LOGIN EMAIL
+   EMAIL LOGIN
 ========================= */
 
 async function login() {
 
   const email =
-    document.getElementById("loginEmail").value.trim();
+    document
+      .getElementById("loginEmail")
+      .value
+      .trim();
+
 
   const password =
-    document.getElementById("loginPassword").value;
+    document
+      .getElementById("loginPassword")
+      .value;
 
 
   if (!email || !password) {
 
-    alert("Email dan password wajib diisi.");
+    alert(
+      "Email dan password wajib diisi."
+    );
 
     return;
 
@@ -86,6 +151,7 @@ async function login() {
     await supabaseClient.auth.signInWithPassword({
 
       email: email,
+
       password: password
 
     });
@@ -93,14 +159,17 @@ async function login() {
 
   if (error) {
 
-    alert("Login gagal: " + error.message);
+    alert(
+      "Login gagal:\n\n" +
+      error.message
+    );
 
     return;
 
   }
 
 
-  await loadSupabaseUser(data.user);
+  await loadUserData(data.user);
 
   showApp();
 
@@ -114,21 +183,41 @@ async function login() {
 async function register() {
 
   const name =
-    document.getElementById("registerName").value.trim();
+    document
+      .getElementById("registerName")
+      .value
+      .trim();
+
 
   const email =
-    document.getElementById("registerEmail").value.trim();
+    document
+      .getElementById("registerEmail")
+      .value
+      .trim();
+
 
   const password =
-    document.getElementById("registerPassword").value;
+    document
+      .getElementById("registerPassword")
+      .value;
+
 
   const password2 =
-    document.getElementById("registerPassword2").value;
+    document
+      .getElementById("registerPassword2")
+      .value;
 
 
-  if (!name || !email || !password || !password2) {
+  if (
+    !name ||
+    !email ||
+    !password ||
+    !password2
+  ) {
 
-    alert("Lengkapi semua data terlebih dahulu.");
+    alert(
+      "Lengkapi semua data terlebih dahulu."
+    );
 
     return;
 
@@ -137,7 +226,9 @@ async function register() {
 
   if (password.length < 6) {
 
-    alert("Password minimal 6 karakter.");
+    alert(
+      "Password minimal 6 karakter."
+    );
 
     return;
 
@@ -146,7 +237,9 @@ async function register() {
 
   if (password !== password2) {
 
-    alert("Konfirmasi password tidak sama.");
+    alert(
+      "Konfirmasi password tidak sama."
+    );
 
     return;
 
@@ -163,7 +256,9 @@ async function register() {
       options: {
 
         data: {
+
           full_name: name
+
         }
 
       }
@@ -173,7 +268,10 @@ async function register() {
 
   if (error) {
 
-    alert("Pendaftaran gagal: " + error.message);
+    alert(
+      "Pendaftaran gagal:\n\n" +
+      error.message
+    );
 
     return;
 
@@ -182,14 +280,17 @@ async function register() {
 
   if (data.session) {
 
-    await loadSupabaseUser(data.user);
+    await loadUserData(data.user);
 
     showApp();
 
-  } else {
+  }
+
+  else {
 
     alert(
-      "Pendaftaran berhasil. Silakan cek email untuk verifikasi."
+      "Pendaftaran berhasil!\n\n" +
+      "Silakan cek email untuk verifikasi akun."
     );
 
     showLogin();
@@ -200,10 +301,10 @@ async function register() {
 
 
 /* =========================
-   LOAD USER
+   USER DATA
 ========================= */
 
-async function loadSupabaseUser(user) {
+async function loadUserData(user) {
 
   if (!user) return;
 
@@ -215,32 +316,43 @@ async function loadSupabaseUser(user) {
     "Pengguna";
 
 
-  document.getElementById("welcomeName")
+  document
+    .getElementById("welcomeName")
     .textContent = name;
 
 
-  document.getElementById("sidebarName")
+  document
+    .getElementById("sidebarName")
     .textContent = name;
 
 
-  document.getElementById("profileName")
+  document
+    .getElementById("profileName")
     .textContent = name;
 
 
-  document.getElementById("profileEmail")
-    .textContent = user.email || "";
+  document
+    .getElementById("profileEmail")
+    .textContent =
+      user.email || "";
 
 
   const firstLetter =
-    name.charAt(0).toUpperCase();
+    name
+      .charAt(0)
+      .toUpperCase();
 
 
-  document.getElementById("sidebarAvatar")
-    .textContent = firstLetter;
+  document
+    .getElementById("sidebarAvatar")
+    .textContent =
+      firstLetter;
 
 
-  document.getElementById("profileAvatar")
-    .textContent = firstLetter;
+  document
+    .getElementById("profileAvatar")
+    .textContent =
+      firstLetter;
 
 }
 
@@ -257,18 +369,23 @@ async function logout() {
 
   if (error) {
 
-    alert("Gagal keluar: " + error.message);
+    alert(
+      "Gagal keluar:\n\n" +
+      error.message
+    );
 
     return;
 
   }
 
 
-  document.getElementById("appScreen")
+  document
+    .getElementById("appScreen")
     .classList.add("hidden");
 
 
-  document.getElementById("authScreen")
+  document
+    .getElementById("authScreen")
     .classList.remove("hidden");
 
 
@@ -283,11 +400,13 @@ async function logout() {
 
 function showApp() {
 
-  document.getElementById("authScreen")
+  document
+    .getElementById("authScreen")
     .classList.add("hidden");
 
 
-  document.getElementById("appScreen")
+  document
+    .getElementById("appScreen")
     .classList.remove("hidden");
 
 }
@@ -361,7 +480,8 @@ function toggleSidebar() {
 
   document
     .getElementById("sidebar")
-    .classList.toggle("show");
+    .classList
+    .toggle("show");
 
 }
 
@@ -387,7 +507,9 @@ function closeSidebar() {
 
 function toggleTheme() {
 
-  document.body.classList.toggle("dark");
+  document.body
+    .classList
+    .toggle("dark");
 
 
   const buttons =
@@ -397,12 +519,16 @@ function toggleTheme() {
   buttons.forEach(button => {
 
     if (
-      document.body.classList.contains("dark")
+      document.body
+        .classList
+        .contains("dark")
     ) {
 
       button.textContent = "☀";
 
-    } else {
+    }
+
+    else {
 
       button.textContent = "☾";
 
@@ -420,10 +546,15 @@ function toggleTheme() {
 function sendMessage() {
 
   const input =
-    document.getElementById("messageInput");
+    document.getElementById(
+      "messageInput"
+    );
+
 
   const messages =
-    document.getElementById("chatMessages");
+    document.getElementById(
+      "chatMessages"
+    );
 
 
   const text =
@@ -451,14 +582,18 @@ function sendMessage() {
 
       <strong>Kamu</strong>
 
-      <p>${escapeHTML(text)}</p>
+      <p>
+        ${escapeHTML(text)}
+      </p>
 
     </div>
 
   `;
 
 
-  messages.appendChild(userMessage);
+  messages.appendChild(
+    userMessage
+  );
 
 
   input.value = "";
@@ -484,8 +619,8 @@ function sendMessage() {
 
       <p>
         Sistem AI belum terhubung ke model.
-        Pada tahap berikutnya kita akan membuat
-        backend dan API ELGHO sendiri.
+        Backend dan API akan kita buat
+        pada tahap berikutnya.
       </p>
 
     </div>
@@ -493,7 +628,9 @@ function sendMessage() {
   `;
 
 
-  messages.appendChild(aiMessage);
+  messages.appendChild(
+    aiMessage
+  );
 
 
   messages.scrollTop =
@@ -508,16 +645,13 @@ function sendMessage() {
 
 function getUserInitial() {
 
-  const user =
-    JSON.parse(localStorage.getItem("elghoUser"));
-
-
-  if (!user) return "L";
-
-
-  return user.name
-    .charAt(0)
-    .toUpperCase();
+  return (
+    document
+      .getElementById(
+        "sidebarAvatar"
+      )
+      .textContent || "L"
+  );
 
 }
 
@@ -537,39 +671,66 @@ function escapeHTML(text) {
 
 
 /* =========================
-   SESSION CHECK
+   SESSION
 ========================= */
 
 async function checkSession() {
 
-  const {
-    data: { session },
-    error
-  } = await supabaseClient.auth.getSession();
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.getSession();
 
 
-  if (error) {
+    if (error) {
 
-    console.error(error);
+      console.error(error);
 
-    return;
+      return;
+
+    }
+
+
+    const session =
+      data.session;
+
+
+    if (
+      session &&
+      session.user
+    ) {
+
+      await loadUserData(
+        session.user
+      );
+
+      showApp();
+
+    }
+
+    else {
+
+      document
+        .getElementById("authScreen")
+        .classList
+        .remove("hidden");
+
+
+      document
+        .getElementById("appScreen")
+        .classList
+        .add("hidden");
+
+    }
 
   }
 
+  catch (error) {
 
-  if (session && session.user) {
-
-    await loadSupabaseUser(session.user);
-
-    showApp();
-
-  } else {
-
-    document.getElementById("authScreen")
-      .classList.remove("hidden");
-
-    document.getElementById("appScreen")
-      .classList.add("hidden");
+    console.error(error);
 
   }
 
@@ -577,11 +738,44 @@ async function checkSession() {
 
 
 /* =========================
+   AUTH STATE
+========================= */
+
+supabaseClient.auth.onAuthStateChange(
+  async (event, session) => {
+
+    console.log(
+      "Auth event:",
+      event
+    );
+
+
+    if (
+      session &&
+      session.user
+    ) {
+
+      await loadUserData(
+        session.user
+      );
+
+      showApp();
+
+    }
+
+  }
+);
+
+
+/* =========================
    STARTUP
 ========================= */
 
-window.addEventListener("load", () => {
+window.addEventListener(
+  "load",
+  () => {
 
-  checkSession();
+    checkSession();
 
-});
+  }
+);
