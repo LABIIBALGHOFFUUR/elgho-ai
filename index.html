@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ELGHO AI</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -53,6 +56,17 @@
         onclick="login()"
       >
         Masuk
+      </button>
+
+      <!-- GOOGLE LOGIN -->
+
+      <button
+        type="button"
+        class="auth-button google-button"
+        onclick="loginWithGoogle()"
+        style="margin-top:10px;background:#4285F4;"
+      >
+        🔵 Lanjutkan dengan Google
       </button>
 
       <p class="switch-auth">
@@ -111,6 +125,17 @@
         onclick="register()"
       >
         Daftar
+      </button>
+
+      <!-- GOOGLE REGISTER -->
+
+      <button
+        type="button"
+        class="auth-button google-button"
+        onclick="loginWithGoogle()"
+        style="margin-top:10px;background:#4285F4;"
+      >
+        🔵 Daftar dengan Google
       </button>
 
       <p class="switch-auth">
@@ -260,8 +285,6 @@
       </nav>
 
 
-      <!-- USER -->
-
       <div class="sidebar-bottom">
 
         <div class="user-box">
@@ -329,9 +352,7 @@
       </header>
 
 
-      <!-- =========================
-           HOME
-      ========================= -->
+      <!-- HOME -->
 
       <section
         class="page active"
@@ -345,28 +366,20 @@
           </div>
 
           <h1>
-
             Halo,
             <span id="welcomeName">
               Pengguna
             </span>
             👋
-
             <br>
-
             Apa yang ingin kamu buat?
-
           </h1>
 
-
           <p>
-
             Gunakan ELGHO AI untuk belajar,
             membuat konten, mencari ide,
             dan berkarya.
-
           </p>
-
 
           <button
             class="primary-btn"
@@ -380,105 +393,40 @@
 
         <div class="quick-grid">
 
-          <button
-            onclick="openPage('chat')"
-          >
-
+          <button onclick="openPage('chat')">
             <span>💬</span>
-
-            <strong>
-              Chat dengan AI
-            </strong>
-
-            <small>
-              Tanya apa saja
-            </small>
-
+            <strong>Chat dengan AI</strong>
+            <small>Tanya apa saja</small>
           </button>
 
-
-          <button
-            onclick="openPage('image')"
-          >
-
+          <button onclick="openPage('image')">
             <span>🖼️</span>
-
-            <strong>
-              Generate Gambar
-            </strong>
-
-            <small>
-              Buat gambar dari prompt
-            </small>
-
+            <strong>Generate Gambar</strong>
+            <small>Buat gambar dari prompt</small>
           </button>
 
-
-          <button
-            onclick="openPage('video')"
-          >
-
+          <button onclick="openPage('video')">
             <span>🎬</span>
-
-            <strong>
-              Generate Video
-            </strong>
-
-            <small>
-              Buat video dengan AI
-            </small>
-
+            <strong>Generate Video</strong>
+            <small>Buat video dengan AI</small>
           </button>
 
-
-          <button
-            onclick="openPage('website')"
-          >
-
+          <button onclick="openPage('website')">
             <span>🌐</span>
-
-            <strong>
-              Buat Website
-            </strong>
-
-            <small>
-              Website dari prompt
-            </small>
-
+            <strong>Buat Website</strong>
+            <small>Website dari prompt</small>
           </button>
 
-
-          <button
-            onclick="openPage('app')"
-          >
-
+          <button onclick="openPage('app')">
             <span>📱</span>
-
-            <strong>
-              Buat Aplikasi
-            </strong>
-
-            <small>
-              Aplikasi dari ide kamu
-            </small>
-
+            <strong>Buat Aplikasi</strong>
+            <small>Aplikasi dari ide kamu</small>
           </button>
 
-
-          <button
-            onclick="openPage('history')"
-          >
-
+          <button onclick="openPage('history')">
             <span>🕘</span>
-
-            <strong>
-              Riwayat
-            </strong>
-
-            <small>
-              Lihat aktivitas kamu
-            </small>
-
+            <strong>Riwayat</strong>
+            <small>Lihat aktivitas kamu</small>
           </button>
 
         </div>
@@ -486,9 +434,7 @@
       </section>
 
 
-      <!-- =========================
-           CHAT
-      ========================= -->
+      <!-- CHAT -->
 
       <section
         class="page"
@@ -497,9 +443,7 @@
 
         <div class="page-header">
 
-          <h1>
-            💬 Chat AI
-          </h1>
+          <h1>💬 Chat AI</h1>
 
           <p>
             Berbicara dengan ELGHO AI.
@@ -546,9 +490,7 @@
               placeholder="Tulis pesan untuk ELGHO AI..."
             ></textarea>
 
-            <button
-              onclick="sendMessage()"
-            >
+            <button onclick="sendMessage()">
               ➤
             </button>
 
@@ -559,9 +501,7 @@
       </section>
 
 
-      <!-- =========================
-           IMAGE
-      ========================= -->
+      <!-- IMAGE -->
 
       <section
         class="page"
@@ -570,9 +510,7 @@
 
         <div class="page-header">
 
-          <h1>
-            🖼️ Generate Gambar
-          </h1>
+          <h1>🖼️ Generate Gambar</h1>
 
           <p>
             Buat gambar menggunakan prompt.
@@ -593,13 +531,8 @@
 
             <select id="imageQuality">
 
-              <option>
-                HD
-              </option>
-
-              <option>
-                Standard
-              </option>
+              <option>HD</option>
+              <option>Standard</option>
 
             </select>
 
@@ -619,9 +552,7 @@
             id="imageResult"
           >
 
-            <span>
-              🖼️
-            </span>
+            <span>🖼️</span>
 
             <p>
               Hasil gambar akan muncul di sini.
@@ -634,9 +565,7 @@
       </section>
 
 
-      <!-- =========================
-           VIDEO
-      ========================= -->
+      <!-- VIDEO -->
 
       <section
         class="page"
@@ -645,9 +574,7 @@
 
         <div class="page-header">
 
-          <h1>
-            🎬 Generate Video
-          </h1>
+          <h1>🎬 Generate Video</h1>
 
           <p>
             Buat video dari deskripsi.
@@ -668,17 +595,9 @@
 
             <select id="videoDuration">
 
-              <option>
-                10 detik
-              </option>
-
-              <option>
-                30 detik
-              </option>
-
-              <option>
-                60 detik
-              </option>
+              <option>10 detik</option>
+              <option>30 detik</option>
+              <option>60 detik</option>
 
             </select>
 
@@ -698,9 +617,7 @@
             id="videoResult"
           >
 
-            <span>
-              🎬
-            </span>
+            <span>🎬</span>
 
             <p>
               Hasil video akan muncul di sini.
@@ -713,9 +630,7 @@
       </section>
 
 
-      <!-- =========================
-           WEBSITE
-      ========================= -->
+      <!-- WEBSITE -->
 
       <section
         class="page"
@@ -724,9 +639,7 @@
 
         <div class="page-header">
 
-          <h1>
-            🌐 Buat Website
-          </h1>
+          <h1>🌐 Buat Website</h1>
 
           <p>
             Ubah ide menjadi website.
@@ -756,9 +669,7 @@
             id="websiteResult"
           >
 
-            <span>
-              🌐
-            </span>
+            <span>🌐</span>
 
             <p>
               Website yang dibuat AI
@@ -772,9 +683,7 @@
       </section>
 
 
-      <!-- =========================
-           APP
-      ========================= -->
+      <!-- APP -->
 
       <section
         class="page"
@@ -783,9 +692,7 @@
 
         <div class="page-header">
 
-          <h1>
-            📱 Buat Aplikasi
-          </h1>
+          <h1>📱 Buat Aplikasi</h1>
 
           <p>
             Buat aplikasi dari ide kamu.
@@ -815,9 +722,7 @@
             id="appResult"
           >
 
-            <span>
-              📱
-            </span>
+            <span>📱</span>
 
             <p>
               Aplikasi yang dibuat AI
@@ -831,9 +736,7 @@
       </section>
 
 
-      <!-- =========================
-           HISTORY
-      ========================= -->
+      <!-- HISTORY -->
 
       <section
         class="page"
@@ -842,9 +745,7 @@
 
         <div class="page-header">
 
-          <h1>
-            🕘 Riwayat
-          </h1>
+          <h1>🕘 Riwayat</h1>
 
           <p>
             Aktivitas kamu akan tersimpan di sini.
@@ -855,13 +756,9 @@
 
         <div class="empty-state">
 
-          <span>
-            🕘
-          </span>
+          <span>🕘</span>
 
-          <h3>
-            Belum ada riwayat
-          </h3>
+          <h3>Belum ada riwayat</h3>
 
           <p>
             Mulai menggunakan ELGHO AI
@@ -873,9 +770,7 @@
       </section>
 
 
-      <!-- =========================
-           PROFILE
-      ========================= -->
+      <!-- PROFILE -->
 
       <section
         class="page"
@@ -884,9 +779,7 @@
 
         <div class="page-header">
 
-          <h1>
-            👤 Profil
-          </h1>
+          <h1>👤 Profil</h1>
 
           <p>
             Kelola informasi akun kamu.
@@ -924,9 +817,7 @@
       </section>
 
 
-      <!-- =========================
-           SETTINGS
-      ========================= -->
+      <!-- SETTINGS -->
 
       <section
         class="page"
@@ -935,9 +826,7 @@
 
         <div class="page-header">
 
-          <h1>
-            ⚙️ Pengaturan
-          </h1>
+          <h1>⚙️ Pengaturan</h1>
 
           <p>
             Atur pengalaman ELGHO AI kamu.
@@ -963,9 +852,7 @@
             </div>
 
 
-            <button
-              onclick="toggleTheme()"
-            >
+            <button onclick="toggleTheme()">
               Ubah
             </button>
 
@@ -1028,7 +915,9 @@
 </div>
 
 
+<!-- Supabase JS sudah dimuat di bagian HEAD -->
+
 <script src="script.js"></script>
 
 </body>
-              </html>
+</html>
