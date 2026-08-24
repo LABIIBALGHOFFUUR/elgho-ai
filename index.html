@@ -9,55 +9,356 @@
 
 <body>
 
-  <header class="navbar">
-    <div class="logo">ELGHO AI</div>
-    <button id="themeButton">☾</button>
-  </header>
+  <div class="app">
 
-  <main class="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
 
-    <section class="hero">
-      <div class="badge">✦ AI ASSISTANT</div>
+      <div class="brand">
+        <div class="brand-logo">E</div>
+        <div>
+          <h2>ELGHO AI</h2>
+          <span>AI Assistant</span>
+        </div>
+      </div>
 
-      <h1>Halo, saya <span>ELGHO AI</span></h1>
-
-      <p>
-        Asisten AI pribadi untuk membantu menjawab pertanyaan,
-        mencari ide, belajar, dan membuat berbagai hal.
-      </p>
-
-      <button class="startButton" onclick="startChat()">
-        Mulai Chat
+      <button class="new-chat" onclick="openPage('chat')">
+        ＋ Chat Baru
       </button>
-    </section>
 
-    <section class="features">
+      <nav>
 
-      <div class="card">
-        <div class="icon">💬</div>
-        <h3>AI Chat</h3>
-        <p>Berkomunikasi dengan ELGHO AI.</p>
+        <button class="nav-item active" onclick="openPage('home', this)">
+          🏠 <span>Beranda</span>
+        </button>
+
+        <button class="nav-item" onclick="openPage('chat', this)">
+          💬 <span>Chat AI</span>
+        </button>
+
+        <button class="nav-item" onclick="openPage('image', this)">
+          🖼️ <span>Generate Gambar</span>
+        </button>
+
+        <button class="nav-item" onclick="openPage('video', this)">
+          🎬 <span>Generate Video</span>
+        </button>
+
+        <button class="nav-item" onclick="openPage('website', this)">
+          🌐 <span>Buat Website</span>
+        </button>
+
+        <button class="nav-item" onclick="openPage('app', this)">
+          📱 <span>Buat Aplikasi</span>
+        </button>
+
+        <button class="nav-item" onclick="openPage('history', this)">
+          🕘 <span>Riwayat</span>
+        </button>
+
+        <button class="nav-item" onclick="openPage('settings', this)">
+          ⚙️ <span>Pengaturan</span>
+        </button>
+
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="user-box">
+          <div class="avatar">L</div>
+          <div>
+            <strong>Pengguna</strong>
+            <small>Free Plan</small>
+          </div>
+        </div>
       </div>
 
-      <div class="card">
-        <div class="icon">💡</div>
-        <h3>Ide & Kreativitas</h3>
-        <p>Bantu menemukan ide dan solusi.</p>
-      </div>
+    </aside>
 
-      <div class="card">
-        <div class="icon">📚</div>
-        <h3>Belajar</h3>
-        <p>Teman belajar kapan saja.</p>
-      </div>
+    <!-- MAIN -->
+    <main class="main">
 
-    </section>
+      <header class="topbar">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
 
-  </main>
+        <div class="mobile-logo">
+          <strong>ELGHO AI</strong>
+        </div>
 
-  <footer>
-    <p>© 2026 ELGHO AI</p>
-  </footer>
+        <button class="theme-btn" onclick="toggleTheme()">☾</button>
+      </header>
+
+      <!-- HOME -->
+      <section class="page active" id="home">
+
+        <div class="hero">
+
+          <div class="hero-badge">
+            ✦ ELGHO AI
+          </div>
+
+          <h1>
+            Apa yang ingin<br>
+            <span>kamu buat hari ini?</span>
+          </h1>
+
+          <p>
+            Asisten AI untuk membantu kamu membuat,
+            belajar, mencari ide, dan berkarya.
+          </p>
+
+          <button class="primary-btn" onclick="openPage('chat')">
+            Mulai Chat →
+          </button>
+
+        </div>
+
+        <div class="quick-grid">
+
+          <button onclick="openPage('chat')">
+            <span>💬</span>
+            <strong>Chat dengan AI</strong>
+            <small>Tanya apa saja</small>
+          </button>
+
+          <button onclick="openPage('image')">
+            <span>🖼️</span>
+            <strong>Generate Gambar</strong>
+            <small>Buat gambar dari prompt</small>
+          </button>
+
+          <button onclick="openPage('video')">
+            <span>🎬</span>
+            <strong>Generate Video</strong>
+            <small>Buat video dengan AI</small>
+          </button>
+
+          <button onclick="openPage('website')">
+            <span>🌐</span>
+            <strong>Buat Website</strong>
+            <small>Website dari prompt</small>
+          </button>
+
+          <button onclick="openPage('app')">
+            <span>📱</span>
+            <strong>Buat Aplikasi</strong>
+            <small>Aplikasi dari ide kamu</small>
+          </button>
+
+          <button onclick="openPage('history')">
+            <span>🕘</span>
+            <strong>Riwayat</strong>
+            <small>Lihat aktivitas kamu</small>
+          </button>
+
+        </div>
+
+      </section>
+
+      <!-- CHAT -->
+      <section class="page" id="chat">
+
+        <div class="page-header">
+          <h1>💬 Chat AI</h1>
+          <p>Berbicara dengan ELGHO AI.</p>
+        </div>
+
+        <div class="chat-container">
+
+          <div class="chat-messages" id="chatMessages">
+
+            <div class="ai-message">
+              <div class="message-avatar">E</div>
+              <div>
+                <strong>ELGHO AI</strong>
+                <p>Halo! Saya ELGHO AI. Ada yang bisa saya bantu?</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="chat-input">
+            <textarea id="messageInput" placeholder="Tulis pesan untuk ELGHO AI..."></textarea>
+            <button onclick="sendMessage()">➤</button>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- IMAGE -->
+      <section class="page" id="image">
+
+        <div class="page-header">
+          <h1>🖼️ Generate Gambar</h1>
+          <p>Buat gambar menggunakan prompt.</p>
+        </div>
+
+        <div class="generator-card">
+
+          <textarea placeholder="Contoh: Kota futuristik Indonesia pada malam hari..."></textarea>
+
+          <div class="generator-options">
+            <select>
+              <option>HD</option>
+              <option>Standard</option>
+            </select>
+
+            <button class="primary-btn">
+              ✨ Generate
+            </button>
+          </div>
+
+          <div class="empty-result">
+            <span>🖼️</span>
+            <p>Hasil gambar akan muncul di sini.</p>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- VIDEO -->
+      <section class="page" id="video">
+
+        <div class="page-header">
+          <h1>🎬 Generate Video</h1>
+          <p>Buat video dari deskripsi.</p>
+        </div>
+
+        <div class="generator-card">
+
+          <textarea placeholder="Deskripsikan video yang ingin dibuat..."></textarea>
+
+          <div class="generator-options">
+
+            <select>
+              <option>10 detik</option>
+              <option>30 detik</option>
+              <option>60 detik</option>
+            </select>
+
+            <button class="primary-btn">
+              🎬 Generate
+            </button>
+
+          </div>
+
+          <div class="empty-result">
+            <span>🎬</span>
+            <p>Hasil video akan muncul di sini.</p>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- WEBSITE -->
+      <section class="page" id="website">
+
+        <div class="page-header">
+          <h1>🌐 Buat Website</h1>
+          <p>Ubah ide menjadi website.</p>
+        </div>
+
+        <div class="generator-card">
+
+          <textarea placeholder="Contoh: Buat website toko pakaian modern..."></textarea>
+
+          <button class="primary-btn">
+            🚀 Buat Website
+          </button>
+
+          <div class="empty-result">
+            <span>🌐</span>
+            <p>Website yang dibuat AI akan muncul di sini.</p>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- APP -->
+      <section class="page" id="app">
+
+        <div class="page-header">
+          <h1>📱 Buat Aplikasi</h1>
+          <p>Buat konsep aplikasi menggunakan AI.</p>
+        </div>
+
+        <div class="generator-card">
+
+          <textarea placeholder="Contoh: Buat aplikasi belajar bahasa..."></textarea>
+
+          <button class="primary-btn">
+            📱 Buat Aplikasi
+          </button>
+
+          <div class="empty-result">
+            <span>📱</span>
+            <p>Aplikasi yang dibuat AI akan muncul di sini.</p>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- HISTORY -->
+      <section class="page" id="history">
+
+        <div class="page-header">
+          <h1>🕘 Riwayat</h1>
+          <p>Aktivitas kamu akan tersimpan di sini.</p>
+        </div>
+
+        <div class="empty-state">
+          <span>🕘</span>
+          <h3>Belum ada riwayat</h3>
+          <p>Mulai menggunakan ELGHO AI untuk melihat aktivitas.</p>
+        </div>
+
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="page" id="settings">
+
+        <div class="page-header">
+          <h1>⚙️ Pengaturan</h1>
+          <p>Atur pengalaman ELGHO AI kamu.</p>
+        </div>
+
+        <div class="settings-list">
+
+          <div class="setting">
+            <div>
+              <strong>Tampilan</strong>
+              <small>Mode terang / gelap</small>
+            </div>
+            <button onclick="toggleTheme()">Ubah</button>
+          </div>
+
+          <div class="setting">
+            <div>
+              <strong>Bahasa</strong>
+              <small>Bahasa Indonesia</small>
+            </div>
+            <button>Indonesia</button>
+          </div>
+
+          <div class="setting">
+            <div>
+              <strong>Akun</strong>
+              <small>Free Plan</small>
+            </div>
+            <button>Kelola</button>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
 
   <script src="script.js"></script>
 
