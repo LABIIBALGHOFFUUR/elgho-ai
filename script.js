@@ -1,9 +1,13 @@
 /* =========================
-   SUPABASE
+   SUPABASE CONFIG
 ========================= */
 
-const SUPABASE_URL = "MASUKKAN_URL_PROJECT_SUPABASE";
-const SUPABASE_PUBLISHABLE_KEY = "MASUKKAN_SB_PUBLISHABLE_KEY";
+const SUPABASE_URL =
+  "https://jsdnbjbxkmouuvvzobad.supabase.co/rest/v1/";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_aTjRYOJHfeZWPDf3oKU-2Q_wbHrfMMX";
+
 
 const supabaseClient =
   window.supabase.createClient(
@@ -43,7 +47,7 @@ function showLogin() {
 
 
 /* =========================
-   REGISTER
+   REGISTER EMAIL
 ========================= */
 
 async function register() {
@@ -71,7 +75,12 @@ async function register() {
       .value;
 
 
-  if (!name || !email || !password || !password2) {
+  if (
+    !name ||
+    !email ||
+    !password ||
+    !password2
+  ) {
 
     alert(
       "Lengkapi semua data terlebih dahulu."
@@ -104,7 +113,10 @@ async function register() {
   }
 
 
-  const { data, error } =
+  const {
+    data,
+    error
+  } =
     await supabaseClient.auth.signUp({
 
       email: email,
@@ -138,7 +150,9 @@ async function register() {
 
   if (data.session) {
 
-    await loadUserData(data.user);
+    await loadUserData(
+      data.user
+    );
 
     showApp();
 
@@ -146,14 +160,14 @@ async function register() {
 
     alert(
       "Pendaftaran berhasil!\n\n" +
-      "Silakan cek email kamu untuk verifikasi akun."
+      "Silakan cek email untuk verifikasi akun."
     );
-
-    showLogin();
 
     document
       .getElementById("loginEmail")
       .value = email;
+
+    showLogin();
 
   }
 
@@ -161,7 +175,7 @@ async function register() {
 
 
 /* =========================
-   LOGIN
+   LOGIN EMAIL
 ========================= */
 
 async function login() {
@@ -181,7 +195,7 @@ async function login() {
   if (!email || !password) {
 
     alert(
-      "Masukkan Gmail/email dan password."
+      "Masukkan email dan password."
     );
 
     return;
@@ -189,14 +203,18 @@ async function login() {
   }
 
 
-  const { data, error } =
-    await supabaseClient.auth.signInWithPassword({
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth
+      .signInWithPassword({
 
-      email: email,
+        email: email,
 
-      password: password
+        password: password
 
-    });
+      });
 
 
   if (error) {
@@ -213,7 +231,9 @@ async function login() {
   }
 
 
-  await loadUserData(data.user);
+  await loadUserData(
+    data.user
+  );
 
   showApp();
 
@@ -221,7 +241,57 @@ async function login() {
 
 
 /* =========================
-   USER DATA
+   GOOGLE LOGIN
+========================= */
+
+async function loginWithGoogle() {
+
+  try {
+
+    const {
+      error
+    } =
+      await supabaseClient.auth
+        .signInWithOAuth({
+
+          provider: "google",
+
+          options: {
+
+            redirectTo:
+              window.location.origin
+
+          }
+
+        });
+
+
+    if (error) {
+
+      alert(
+        "Google Login gagal:\n\n" +
+        error.message
+      );
+
+      console.error(error);
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Terjadi kesalahan saat membuka Google Login."
+    );
+
+  }
+
+}
+
+
+/* =========================
+   LOAD USER
 ========================= */
 
 async function loadUserData(user) {
@@ -237,32 +307,47 @@ async function loadUserData(user) {
 
 
   const welcomeName =
-    document.getElementById("welcomeName");
+    document.getElementById(
+      "welcomeName"
+    );
 
   const sidebarName =
-    document.getElementById("sidebarName");
+    document.getElementById(
+      "sidebarName"
+    );
 
   const profileName =
-    document.getElementById("profileName");
+    document.getElementById(
+      "profileName"
+    );
 
   const profileEmail =
-    document.getElementById("profileEmail");
+    document.getElementById(
+      "profileEmail"
+    );
 
   const sidebarAvatar =
-    document.getElementById("sidebarAvatar");
+    document.getElementById(
+      "sidebarAvatar"
+    );
 
   const profileAvatar =
-    document.getElementById("profileAvatar");
+    document.getElementById(
+      "profileAvatar"
+    );
 
 
   if (welcomeName)
     welcomeName.textContent = name;
 
+
   if (sidebarName)
     sidebarName.textContent = name;
 
+
   if (profileName)
     profileName.textContent = name;
+
 
   if (profileEmail)
     profileEmail.textContent =
@@ -276,10 +361,13 @@ async function loadUserData(user) {
 
 
   if (sidebarAvatar)
-    sidebarAvatar.textContent = initial;
+    sidebarAvatar.textContent =
+      initial;
+
 
   if (profileAvatar)
-    profileAvatar.textContent = initial;
+    profileAvatar.textContent =
+      initial;
 
 }
 
@@ -290,8 +378,11 @@ async function loadUserData(user) {
 
 async function logout() {
 
-  const { error } =
-    await supabaseClient.auth.signOut();
+  const {
+    error
+  } =
+    await supabaseClient.auth
+      .signOut();
 
 
   if (error) {
@@ -310,9 +401,11 @@ async function logout() {
     .getElementById("appScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("authScreen")
     .classList.remove("hidden");
+
 
   showLogin();
 
@@ -329,6 +422,7 @@ function showApp() {
     .getElementById("authScreen")
     .classList.add("hidden");
 
+
   document
     .getElementById("appScreen")
     .classList.remove("hidden");
@@ -340,44 +434,61 @@ function showApp() {
    NAVIGATION
 ========================= */
 
-function openPage(pageId, button) {
+function openPage(
+  pageId,
+  button
+) {
 
   const pages =
-    document.querySelectorAll(".page");
+    document.querySelectorAll(
+      ".page"
+    );
 
 
   pages.forEach(page => {
 
-    page.classList.remove("active");
+    page.classList.remove(
+      "active"
+    );
 
   });
 
 
   const selectedPage =
-    document.getElementById(pageId);
+    document.getElementById(
+      pageId
+    );
 
 
   if (selectedPage) {
 
-    selectedPage.classList.add("active");
+    selectedPage.classList.add(
+      "active"
+    );
 
   }
 
 
   const navItems =
-    document.querySelectorAll(".nav-item");
+    document.querySelectorAll(
+      ".nav-item"
+    );
 
 
   navItems.forEach(item => {
 
-    item.classList.remove("active");
+    item.classList.remove(
+      "active"
+    );
 
   });
 
 
   if (button) {
 
-    button.classList.add("active");
+    button.classList.add(
+      "active"
+    );
 
   }
 
@@ -413,12 +524,16 @@ function toggleSidebar() {
 function closeSidebar() {
 
   const sidebar =
-    document.getElementById("sidebar");
+    document.getElementById(
+      "sidebar"
+    );
 
 
   if (window.innerWidth <= 800) {
 
-    sidebar.classList.remove("show");
+    sidebar.classList.remove(
+      "show"
+    );
 
   }
 
@@ -426,7 +541,7 @@ function closeSidebar() {
 
 
 /* =========================
-   DARK MODE
+   THEME
 ========================= */
 
 function toggleTheme() {
@@ -437,24 +552,19 @@ function toggleTheme() {
 
 
   const buttons =
-    document.querySelectorAll(".theme-btn");
+    document.querySelectorAll(
+      ".theme-btn"
+    );
 
 
   buttons.forEach(button => {
 
-    if (
+    button.textContent =
       document.body
         .classList
         .contains("dark")
-    ) {
-
-      button.textContent = "☀";
-
-    } else {
-
-      button.textContent = "☾";
-
-    }
+        ? "☀"
+        : "☾";
 
   });
 
@@ -486,7 +596,9 @@ function sendMessage() {
 
 
   const userMessage =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
 
   userMessage.className =
@@ -521,7 +633,9 @@ function sendMessage() {
 
 
   const aiMessage =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
 
   aiMessage.className =
@@ -572,7 +686,8 @@ function getUserInitial() {
     );
 
 
-  return avatar?.textContent || "L";
+  return avatar?.textContent ||
+    "L";
 
 }
 
@@ -580,7 +695,9 @@ function getUserInitial() {
 function escapeHTML(text) {
 
   const div =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
 
   div.textContent = text;
@@ -601,7 +718,8 @@ async function checkSession() {
     data,
     error
   } =
-    await supabaseClient.auth.getSession();
+    await supabaseClient.auth
+      .getSession();
 
 
   if (error) {
@@ -627,12 +745,17 @@ async function checkSession() {
   } else {
 
     document
-      .getElementById("authScreen")
+      .getElementById(
+        "authScreen"
+      )
       .classList
       .remove("hidden");
 
+
     document
-      .getElementById("appScreen")
+      .getElementById(
+        "appScreen"
+      )
       .classList
       .add("hidden");
 
@@ -645,30 +768,34 @@ async function checkSession() {
    AUTH STATE
 ========================= */
 
-supabaseClient.auth.onAuthStateChange(
-  async (event, session) => {
+supabaseClient.auth
+  .onAuthStateChange(
+    async (
+      event,
+      session
+    ) => {
 
-    console.log(
-      "Auth:",
-      event
-    );
-
-
-    if (
-      session &&
-      session.user
-    ) {
-
-      await loadUserData(
-        session.user
+      console.log(
+        "Auth:",
+        event
       );
 
-      showApp();
+
+      if (
+        session &&
+        session.user
+      ) {
+
+        await loadUserData(
+          session.user
+        );
+
+        showApp();
+
+      }
 
     }
-
-  }
-);
+  );
 
 
 /* =========================
