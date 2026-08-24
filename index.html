@@ -9,7 +9,6 @@
 
 <body>
 
-<!-- AUTH -->
 <div id="authScreen" class="auth-screen">
 
   <div class="auth-card">
@@ -19,22 +18,12 @@
     <h1>ELGHO AI</h1>
     <p class="auth-subtitle">AI Assistant milikmu.</p>
 
+    <!-- LOGIN -->
+
     <div id="loginForm">
 
       <h2>Selamat datang 👋</h2>
-
-      <p class="form-info">
-        Masuk atau daftar menggunakan akun Google.
-      </p>
-
-      <button class="google-button" onclick="googleLogin()">
-        <span class="google-icon">G</span>
-        <span>Lanjutkan dengan Google</span>
-      </button>
-
-      <div class="divider">
-        <span>atau</span>
-      </div>
+      <p class="form-info">Masuk ke akun ELGHO AI kamu.</p>
 
       <input
         type="email"
@@ -59,25 +48,12 @@
 
     </div>
 
-
     <!-- REGISTER -->
 
     <div id="registerForm" class="hidden">
 
       <h2>Buat akun 🚀</h2>
-
-      <p class="form-info">
-        Daftar untuk mulai menggunakan ELGHO AI.
-      </p>
-
-      <button class="google-button" onclick="googleLogin()">
-        <span class="google-icon">G</span>
-        <span>Daftar dengan Google</span>
-      </button>
-
-      <div class="divider">
-        <span>atau</span>
-      </div>
+      <p class="form-info">Daftar untuk mulai menggunakan ELGHO AI.</p>
 
       <input
         type="text"
@@ -97,6 +73,12 @@
         placeholder="Password"
       >
 
+      <input
+        type="password"
+        id="registerPassword2"
+        placeholder="Konfirmasi password"
+      >
+
       <button class="auth-button" onclick="register()">
         Daftar
       </button>
@@ -108,17 +90,12 @@
 
     </div>
 
-    <p class="auth-note">
-      Login Google akan diaktifkan saat sistem authentication ELGHO
-      terhubung ke backend.
-    </p>
-
   </div>
 
 </div>
 
 
-<!-- APPLICATION -->
+<!-- APLIKASI -->
 
 <div id="appScreen" class="hidden">
 
@@ -249,6 +226,7 @@
 
         </div>
 
+
         <div class="quick-grid">
 
           <button onclick="openPage('chat')">
@@ -311,10 +289,12 @@
 
               <div>
                 <strong>ELGHO AI</strong>
+
                 <p>
                   Halo! Saya ELGHO AI.
                   Ada yang bisa saya bantu?
                 </p>
+
               </div>
 
             </div>
@@ -393,9 +373,11 @@
           <div class="generator-options">
 
             <select>
+
               <option>10 detik</option>
               <option>30 detik</option>
               <option>60 detik</option>
+
             </select>
 
             <button class="primary-btn">
@@ -502,8 +484,13 @@
       <section class="page" id="profile">
 
         <div class="page-header">
+
           <h1>👤 Profil</h1>
-          <p>Kelola informasi akun kamu.</p>
+
+          <p>
+            Kelola informasi akun kamu.
+          </p>
+
         </div>
 
         <div class="profile-card">
@@ -512,7 +499,9 @@
             L
           </div>
 
-          <h2 id="profileName">Pengguna</h2>
+          <h2 id="profileName">
+            Pengguna
+          </h2>
 
           <p id="profileEmail">
             email@example.com
@@ -532,8 +521,13 @@
       <section class="page" id="settings">
 
         <div class="page-header">
+
           <h1>⚙️ Pengaturan</h1>
-          <p>Atur pengalaman ELGHO AI kamu.</p>
+
+          <p>
+            Atur pengalaman ELGHO AI kamu.
+          </p>
+
         </div>
 
         <div class="settings-list">
@@ -586,6 +580,7 @@
   </div>
 
 </div>
+
 
 <script src="script.js"></script>
 
