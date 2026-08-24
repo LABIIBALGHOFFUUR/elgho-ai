@@ -1,13 +1,30 @@
-/* =========================
-   ELGHO AI - SCRIPT
-========================= */
+/* =====================================================
+   ELGHO AI
+   SUPABASE AUTH + GOOGLE LOGIN
+===================================================== */
 
-console.log("ELGHO AI JavaScript aktif");
+
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
+
+const SUPABASE_URL =
+  "https://jsdnbjbxkmouuvvzobad.supabase.co/rest/v1/";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_aTjRYOJHfeZWPDf3oKU-2Q_wbHrfMMX";
 
 
-/* =========================
-   AUTH
-========================= */
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* =====================================================
+   AUTH - SHOW LOGIN / REGISTER
+===================================================== */
 
 function showRegister() {
 
@@ -35,11 +52,11 @@ function showLogin() {
 }
 
 
-/* =========================
-   REGISTER
-========================= */
+/* =====================================================
+   REGISTER EMAIL + PASSWORD
+===================================================== */
 
-function register() {
+async function register() {
 
   const name =
     document
@@ -51,8 +68,7 @@ function register() {
     document
       .getElementById("registerEmail")
       .value
-      .trim()
-      .toLowerCase();
+      .trim();
 
   const password =
     document
@@ -73,18 +89,7 @@ function register() {
   ) {
 
     alert(
-      "Mohon isi semua data terlebih dahulu."
-    );
-
-    return;
-
-  }
-
-
-  if (!email.includes("@")) {
-
-    alert(
-      "Masukkan alamat email yang valid."
+      "Lengkapi semua data terlebih dahulu."
     );
 
     return;
@@ -114,78 +119,110 @@ function register() {
   }
 
 
-  const existingUser =
-    localStorage.getItem("elghoUser");
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.signUp({
+
+        email: email,
+
+        password: password,
+
+        options: {
+
+          data: {
+            full_name: name
+          },
+
+          emailRedirectTo:
+            window.location.origin +
+            window.location.pathname
+
+        }
+
+      });
 
 
-  if (existingUser) {
+    if (error) {
 
-    const oldUser =
-      JSON.parse(existingUser);
-
-
-    if (oldUser.email === email) {
+      console.error(
+        "REGISTER ERROR:",
+        error
+      );
 
       alert(
-        "Email tersebut sudah terdaftar."
+        "Pendaftaran gagal: " +
+        error.message
       );
 
       return;
 
     }
 
+
+    /*
+      Supabase bisa meminta verifikasi email.
+    */
+
+    if (
+      data.user &&
+      !data.session
+    ) {
+
+      alert(
+        "Pendaftaran berhasil! " +
+        "Silakan cek email kamu untuk verifikasi."
+      );
+
+      showLogin();
+
+      document
+        .getElementById("loginEmail")
+        .value = email;
+
+      return;
+
+    }
+
+
+    if (data.session) {
+
+      await handleUserSession(
+        data.session
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "REGISTER ERROR:",
+      error
+    );
+
+    alert(
+      "Terjadi kesalahan saat mendaftar."
+    );
+
   }
-
-
-  const user = {
-
-    name: name,
-
-    email: email,
-
-    password: password
-
-  };
-
-
-  localStorage.setItem(
-    "elghoUser",
-    JSON.stringify(user)
-  );
-
-
-  alert(
-    "Pendaftaran berhasil! Silakan masuk."
-  );
-
-
-  document
-    .getElementById("loginEmail")
-    .value = email;
-
-
-  document
-    .getElementById("loginPassword")
-    .value = "";
-
-
-  showLogin();
 
 }
 
 
-/* =========================
-   LOGIN
-========================= */
+/* =====================================================
+   LOGIN EMAIL + PASSWORD
+===================================================== */
 
-function login() {
+async function login() {
 
   const email =
     document
       .getElementById("loginEmail")
       .value
-      .trim()
-      .toLowerCase();
+      .trim();
 
   const password =
     document
@@ -204,59 +241,202 @@ function login() {
   }
 
 
-  const savedUser =
-    localStorage.getItem("elghoUser");
-
-
-  if (!savedUser) {
-
-    alert(
-      "Akun belum ditemukan. Silakan daftar terlebih dahulu."
-    );
-
-    return;
-
-  }
-
-
-  let user;
-
-
   try {
 
-    user =
-      JSON.parse(savedUser);
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.signInWithPassword({
+
+        email: email,
+
+        password: password
+
+      });
+
+
+    if (error) {
+
+      console.error(
+        "LOGIN ERROR:",
+        error
+      );
+
+      alert(
+        "Login gagal: " +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    await handleUserSession(
+      data.session
+    );
 
   } catch (error) {
 
-    alert(
-      "Data akun rusak. Silakan daftar ulang."
+    console.error(
+      "LOGIN ERROR:",
+      error
     );
 
-    localStorage.removeItem("elghoUser");
+    alert(
+      "Terjadi kesalahan saat login."
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   GOOGLE LOGIN
+===================================================== */
+
+async function loginWithGoogle() {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.signInWithOAuth({
+
+        provider: "google",
+
+        options: {
+
+          redirectTo:
+            window.location.origin +
+            window.location.pathname
+
+        }
+
+      });
+
+
+    if (error) {
+
+      console.error(
+        "GOOGLE LOGIN ERROR:",
+        error
+      );
+
+      alert(
+        "Login Google gagal: " +
+        error.message
+      );
+
+      return;
+
+    }
+
+    /*
+      Supabase otomatis mengarahkan
+      pengguna ke Google.
+    */
+
+  } catch (error) {
+
+    console.error(
+      "GOOGLE LOGIN ERROR:",
+      error
+    );
+
+    alert(
+      "Terjadi kesalahan saat membuka Google Login."
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+  async (event, session) => {
+
+    console.log(
+      "AUTH EVENT:",
+      event
+    );
+
+
+    if (session) {
+
+      await handleUserSession(
+        session
+      );
+
+    } else {
+
+      showAuthScreen();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   HANDLE SESSION
+===================================================== */
+
+async function handleUserSession(session) {
+
+  if (!session || !session.user) {
+
+    showAuthScreen();
 
     return;
 
   }
 
 
-  if (
-    email !== user.email ||
-    password !== user.password
-  ) {
+  const user =
+    session.user;
 
-    alert(
-      "Email atau password salah."
-    );
 
-    return;
+  /*
+    Ambil nama dari metadata Google/Supabase.
+  */
 
-  }
+  let name =
+    user.user_metadata?.full_name ||
+    user.user_metadata?.name ||
+    user.email?.split("@")[0] ||
+    "Pengguna";
 
+
+  /*
+    Simpan data profil sederhana
+    untuk tampilan aplikasi.
+  */
 
   localStorage.setItem(
-    "elghoLoggedIn",
-    "true"
+    "elghoProfile",
+    JSON.stringify({
+
+      id: user.id,
+
+      name: name,
+
+      email: user.email || "",
+
+      avatar:
+        user.user_metadata?.avatar_url ||
+        user.user_metadata?.picture ||
+        ""
+
+    })
   );
 
 
@@ -267,164 +447,26 @@ function login() {
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
+/* =====================================================
+   SHOW AUTH
+===================================================== */
 
-function logout() {
-
-  localStorage.removeItem(
-    "elghoLoggedIn"
-  );
-
-
-  document
-    .getElementById("appScreen")
-    .classList.add("hidden");
-
+function showAuthScreen() {
 
   document
     .getElementById("authScreen")
     .classList.remove("hidden");
 
-
-  showLogin();
-
-}
-
-
-/* =========================
-   LOAD USER
-========================= */
-
-function loadUserData() {
-
-  const savedUser =
-    localStorage.getItem("elghoUser");
-
-
-  if (!savedUser) {
-    return;
-  }
-
-
-  let user;
-
-
-  try {
-
-    user =
-      JSON.parse(savedUser);
-
-  } catch (error) {
-
-    return;
-
-  }
-
-
-  const name =
-    user.name || "Pengguna";
-
-  const email =
-    user.email || "";
-
-
-  const welcomeName =
-    document.getElementById(
-      "welcomeName"
-    );
-
-
-  const sidebarName =
-    document.getElementById(
-      "sidebarName"
-    );
-
-
-  const profileName =
-    document.getElementById(
-      "profileName"
-    );
-
-
-  const profileEmail =
-    document.getElementById(
-      "profileEmail"
-    );
-
-
-  const sidebarAvatar =
-    document.getElementById(
-      "sidebarAvatar"
-    );
-
-
-  const profileAvatar =
-    document.getElementById(
-      "profileAvatar"
-    );
-
-
-  if (welcomeName) {
-
-    welcomeName.textContent =
-      name;
-
-  }
-
-
-  if (sidebarName) {
-
-    sidebarName.textContent =
-      name;
-
-  }
-
-
-  if (profileName) {
-
-    profileName.textContent =
-      name;
-
-  }
-
-
-  if (profileEmail) {
-
-    profileEmail.textContent =
-      email;
-
-  }
-
-
-  const initial =
-    name
-      .charAt(0)
-      .toUpperCase();
-
-
-  if (sidebarAvatar) {
-
-    sidebarAvatar.textContent =
-      initial;
-
-  }
-
-
-  if (profileAvatar) {
-
-    profileAvatar.textContent =
-      initial;
-
-  }
+  document
+    .getElementById("appScreen")
+    .classList.add("hidden");
 
 }
 
 
-/* =========================
+/* =====================================================
    SHOW APP
-========================= */
+===================================================== */
 
 function showApp() {
 
@@ -432,22 +474,227 @@ function showApp() {
     .getElementById("authScreen")
     .classList.add("hidden");
 
-
   document
     .getElementById("appScreen")
     .classList.remove("hidden");
 
+}
 
-  loadUserData();
+
+/* =====================================================
+   USER DATA
+===================================================== */
+
+async function loadUserData() {
+
+  let profile =
+    JSON.parse(
+      localStorage.getItem(
+        "elghoProfile"
+      )
+    );
+
+
+  /*
+    Coba ambil user langsung dari Supabase.
+  */
+
+  const {
+    data
+  } =
+    await supabaseClient.auth.getUser();
+
+
+  if (data && data.user) {
+
+    const user =
+      data.user;
+
+
+    const name =
+      user.user_metadata?.full_name ||
+      user.user_metadata?.name ||
+      profile?.name ||
+      user.email?.split("@")[0] ||
+      "Pengguna";
+
+
+    profile = {
+
+      id: user.id,
+
+      name: name,
+
+      email:
+        user.email || "",
+
+      avatar:
+        user.user_metadata?.avatar_url ||
+        user.user_metadata?.picture ||
+        ""
+
+    };
+
+
+    localStorage.setItem(
+      "elghoProfile",
+      JSON.stringify(profile)
+    );
+
+  }
+
+
+  if (!profile) {
+
+    return;
+
+  }
+
+
+  const name =
+    profile.name ||
+    "Pengguna";
+
+
+  const email =
+    profile.email ||
+    "";
+
+
+  document
+    .getElementById("welcomeName")
+    .textContent = name;
+
+
+  document
+    .getElementById("sidebarName")
+    .textContent = name;
+
+
+  document
+    .getElementById("profileName")
+    .textContent = name;
+
+
+  document
+    .getElementById("profileEmail")
+    .textContent = email;
+
+
+  const firstLetter =
+    name
+      .charAt(0)
+      .toUpperCase();
+
+
+  document
+    .getElementById("sidebarAvatar")
+    .textContent =
+      firstLetter;
+
+
+  /*
+    Kalau Google punya foto profil,
+    gunakan foto tersebut.
+  */
+
+  if (profile.avatar) {
+
+    const sidebarAvatar =
+      document.getElementById(
+        "sidebarAvatar"
+      );
+
+    const profileAvatar =
+      document.getElementById(
+        "profileAvatar"
+      );
+
+
+    sidebarAvatar.innerHTML =
+      `<img src="${escapeAttribute(
+        profile.avatar
+      )}" alt="Avatar">`;
+
+
+    profileAvatar.innerHTML =
+      `<img src="${escapeAttribute(
+        profile.avatar
+      )}" alt="Avatar">`;
+
+  } else {
+
+    document
+      .getElementById("profileAvatar")
+      .textContent =
+        firstLetter;
+
+  }
 
 }
 
 
-/* =========================
-   NAVIGATION
-========================= */
+/* =====================================================
+   LOGOUT
+===================================================== */
 
-function openPage(pageId, button) {
+async function logout() {
+
+  try {
+
+    const {
+      error
+    } =
+      await supabaseClient.auth.signOut();
+
+
+    if (error) {
+
+      console.error(
+        "LOGOUT ERROR:",
+        error
+      );
+
+      alert(
+        "Gagal keluar: " +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    localStorage.removeItem(
+      "elghoProfile"
+    );
+
+
+    showAuthScreen();
+
+    showLogin();
+
+
+  } catch (error) {
+
+    console.error(
+      "LOGOUT ERROR:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function openPage(
+  pageId,
+  button
+) {
 
   const pages =
     document.querySelectorAll(
@@ -455,13 +702,15 @@ function openPage(pageId, button) {
     );
 
 
-  pages.forEach(function(page) {
+  pages.forEach(
+    page => {
 
-    page.classList.remove(
-      "active"
-    );
+      page.classList.remove(
+        "active"
+      );
 
-  });
+    }
+  );
 
 
   const selectedPage =
@@ -470,21 +719,13 @@ function openPage(pageId, button) {
     );
 
 
-  if (!selectedPage) {
+  if (selectedPage) {
 
-    console.warn(
-      "Halaman tidak ditemukan:",
-      pageId
+    selectedPage.classList.add(
+      "active"
     );
 
-    return;
-
   }
-
-
-  selectedPage.classList.add(
-    "active"
-  );
 
 
   const navItems =
@@ -493,13 +734,15 @@ function openPage(pageId, button) {
     );
 
 
-  navItems.forEach(function(item) {
+  navItems.forEach(
+    item => {
 
-    item.classList.remove(
-      "active"
-    );
+      item.classList.remove(
+        "active"
+      );
 
-  });
+    }
+  );
 
 
   if (button) {
@@ -515,33 +758,27 @@ function openPage(pageId, button) {
 
 
   window.scrollTo({
+
     top: 0,
+
     behavior: "smooth"
+
   });
 
 }
 
 
-/* =========================
+/* =====================================================
    SIDEBAR
-========================= */
+===================================================== */
 
 function toggleSidebar() {
 
-  const sidebar =
-    document.getElementById(
-      "sidebar"
+  document
+    .getElementById("sidebar")
+    .classList.toggle(
+      "show"
     );
-
-
-  if (!sidebar) {
-    return;
-  }
-
-
-  sidebar.classList.toggle(
-    "show"
-  );
 
 }
 
@@ -552,11 +789,6 @@ function closeSidebar() {
     document.getElementById(
       "sidebar"
     );
-
-
-  if (!sidebar) {
-    return;
-  }
 
 
   if (
@@ -572,9 +804,9 @@ function closeSidebar() {
 }
 
 
-/* =========================
+/* =====================================================
    DARK MODE
-========================= */
+===================================================== */
 
 function toggleTheme() {
 
@@ -589,42 +821,32 @@ function toggleTheme() {
     );
 
 
-  buttons.forEach(function(button) {
+  buttons.forEach(
+    button => {
 
-    if (
-      document.body.classList.contains(
-        "dark"
-      )
-    ) {
+      if (
+        document.body.classList.contains(
+          "dark"
+        )
+      ) {
 
-      button.textContent = "☀";
+        button.textContent = "☀";
 
-    } else {
+      } else {
 
-      button.textContent = "☾";
+        button.textContent = "☾";
+
+      }
 
     }
-
-  });
-
-
-  const isDark =
-    document.body.classList.contains(
-      "dark"
-    );
-
-
-  localStorage.setItem(
-    "elghoTheme",
-    isDark ? "dark" : "light"
   );
 
 }
 
 
-/* =========================
+/* =====================================================
    CHAT
-========================= */
+===================================================== */
 
 function sendMessage() {
 
@@ -638,11 +860,6 @@ function sendMessage() {
     document.getElementById(
       "chatMessages"
     );
-
-
-  if (!input || !messages) {
-    return;
-  }
 
 
   const text =
@@ -674,9 +891,7 @@ function sendMessage() {
 
     <div>
 
-      <strong>
-        Kamu
-      </strong>
+      <strong>Kamu</strong>
 
       <p>
         ${escapeHTML(text)}
@@ -718,10 +933,9 @@ function sendMessage() {
       </strong>
 
       <p>
-        Pesan kamu sudah diterima.
-        Pada tahap berikutnya kita akan
-        menghubungkan ELGHO AI dengan
-        model AI melalui backend.
+        Sistem AI belum terhubung
+        ke model. Backend AI akan
+        ditambahkan pada tahap berikutnya.
       </p>
 
     </div>
@@ -729,17 +943,9 @@ function sendMessage() {
   `;
 
 
-  setTimeout(function() {
-
-    messages.appendChild(
-      aiMessage
-    );
-
-
-    messages.scrollTop =
-      messages.scrollHeight;
-
-  }, 500);
+  messages.appendChild(
+    aiMessage
+  );
 
 
   messages.scrollTop =
@@ -748,30 +954,22 @@ function sendMessage() {
 }
 
 
-/* =========================
+/* =====================================================
    IMAGE
-========================= */
+===================================================== */
 
 function generateImage() {
 
   const prompt =
-    document.getElementById(
-      "imagePrompt"
-    );
+    document
+      .getElementById(
+        "imagePrompt"
+      )
+      .value
+      .trim();
 
 
-  const result =
-    document.getElementById(
-      "imageResult"
-    );
-
-
-  if (!prompt || !result) {
-    return;
-  }
-
-
-  if (!prompt.value.trim()) {
+  if (!prompt) {
 
     alert(
       "Masukkan prompt gambar terlebih dahulu."
@@ -782,46 +980,29 @@ function generateImage() {
   }
 
 
-  result.innerHTML = `
-
-    <span>✨</span>
-
-    <p>
-      Prompt diterima.
-      Generator gambar akan
-      dihubungkan ke API pada
-      tahap berikutnya.
-    </p>
-
-  `;
+  alert(
+    "Generator gambar AI akan dihubungkan pada tahap berikutnya."
+  );
 
 }
 
 
-/* =========================
+/* =====================================================
    VIDEO
-========================= */
+===================================================== */
 
 function generateVideo() {
 
   const prompt =
-    document.getElementById(
-      "videoPrompt"
-    );
+    document
+      .getElementById(
+        "videoPrompt"
+      )
+      .value
+      .trim();
 
 
-  const result =
-    document.getElementById(
-      "videoResult"
-    );
-
-
-  if (!prompt || !result) {
-    return;
-  }
-
-
-  if (!prompt.value.trim()) {
+  if (!prompt) {
 
     alert(
       "Masukkan deskripsi video terlebih dahulu."
@@ -832,46 +1013,29 @@ function generateVideo() {
   }
 
 
-  result.innerHTML = `
-
-    <span>✨</span>
-
-    <p>
-      Deskripsi video diterima.
-      Generator video akan
-      dihubungkan ke API pada
-      tahap berikutnya.
-    </p>
-
-  `;
+  alert(
+    "Generator video AI akan dihubungkan pada tahap berikutnya."
+  );
 
 }
 
 
-/* =========================
-   WEBSITE GENERATOR
-========================= */
+/* =====================================================
+   WEBSITE
+===================================================== */
 
 function createWebsite() {
 
   const prompt =
-    document.getElementById(
-      "websitePrompt"
-    );
+    document
+      .getElementById(
+        "websitePrompt"
+      )
+      .value
+      .trim();
 
 
-  const result =
-    document.getElementById(
-      "websiteResult"
-    );
-
-
-  if (!prompt || !result) {
-    return;
-  }
-
-
-  if (!prompt.value.trim()) {
+  if (!prompt) {
 
     alert(
       "Masukkan ide website terlebih dahulu."
@@ -882,45 +1046,29 @@ function createWebsite() {
   }
 
 
-  result.innerHTML = `
-
-    <span>🌐</span>
-
-    <p>
-      Ide website diterima.
-      AI Website Builder akan
-      dibuat pada tahap berikutnya.
-    </p>
-
-  `;
+  alert(
+    "AI Website Builder akan dihubungkan pada tahap berikutnya."
+  );
 
 }
 
 
-/* =========================
-   APP GENERATOR
-========================= */
+/* =====================================================
+   APP
+===================================================== */
 
 function createApp() {
 
   const prompt =
-    document.getElementById(
-      "appPrompt"
-    );
+    document
+      .getElementById(
+        "appPrompt"
+      )
+      .value
+      .trim();
 
 
-  const result =
-    document.getElementById(
-      "appResult"
-    );
-
-
-  if (!prompt || !result) {
-    return;
-  }
-
-
-  if (!prompt.value.trim()) {
+  if (!prompt) {
 
     alert(
       "Masukkan ide aplikasi terlebih dahulu."
@@ -931,62 +1079,43 @@ function createApp() {
   }
 
 
-  result.innerHTML = `
-
-    <span>📱</span>
-
-    <p>
-      Ide aplikasi diterima.
-      AI App Builder akan
-      dibuat pada tahap berikutnya.
-    </p>
-
-  `;
+  alert(
+    "AI App Builder akan dihubungkan pada tahap berikutnya."
+  );
 
 }
 
 
-/* =========================
-   USER INITIAL
-========================= */
+/* =====================================================
+   HELPERS
+===================================================== */
 
 function getUserInitial() {
 
-  const savedUser =
-    localStorage.getItem(
-      "elghoUser"
+  const profile =
+    JSON.parse(
+      localStorage.getItem(
+        "elghoProfile"
+      )
     );
 
 
-  if (!savedUser) {
-    return "L";
-  }
-
-
-  try {
-
-    const user =
-      JSON.parse(savedUser);
-
-
-    return (
-      user.name || "L"
-    )
-      .charAt(0)
-      .toUpperCase();
-
-  } catch (error) {
+  if (
+    !profile ||
+    !profile.name
+  ) {
 
     return "L";
 
   }
+
+
+  return profile.name
+    .charAt(0)
+    .toUpperCase();
 
 }
 
-
-/* =========================
-   SECURITY HELPER
-========================= */
 
 function escapeHTML(text) {
 
@@ -1005,82 +1134,72 @@ function escapeHTML(text) {
 }
 
 
-/* =========================
-   RESTORE THEME
-========================= */
+function escapeAttribute(text) {
 
-function loadTheme() {
-
-  const theme =
-    localStorage.getItem(
-      "elghoTheme"
-    );
-
-
-  if (theme === "dark") {
-
-    document.body.classList.add(
-      "dark"
-    );
-
-
-    const buttons =
-      document.querySelectorAll(
-        ".theme-btn"
-      );
-
-
-    buttons.forEach(function(button) {
-
-      button.textContent = "☀";
-
-    });
-
-  }
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 
 }
 
 
-/* =========================
+/* =====================================================
    STARTUP
-========================= */
+===================================================== */
 
 window.addEventListener(
   "load",
-  function() {
+  async () => {
 
-    loadTheme();
+    try {
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.auth.getSession();
 
 
-    const loggedIn =
-      localStorage.getItem(
-        "elghoLoggedIn"
+      if (error) {
+
+        console.error(
+          "SESSION ERROR:",
+          error
+        );
+
+        showAuthScreen();
+
+        return;
+
+      }
+
+
+      if (
+        data &&
+        data.session
+      ) {
+
+        await handleUserSession(
+          data.session
+        );
+
+      } else {
+
+        showAuthScreen();
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "STARTUP ERROR:",
+        error
       );
 
-
-    const savedUser =
-      localStorage.getItem(
-        "elghoUser"
-      );
-
-
-    if (
-      loggedIn === "true" &&
-      savedUser
-    ) {
-
-      showApp();
-
-    } else {
-
-      document
-        .getElementById("authScreen")
-        .classList.remove("hidden");
-
-
-      document
-        .getElementById("appScreen")
-        .classList.add("hidden");
+      showAuthScreen();
 
     }
 
