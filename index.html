@@ -3,219 +3,1003 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>ELGHO AI</title>
-
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- LOGIN / DAFTAR -->
+<!-- =========================
+     AUTH SCREEN
+========================= -->
 
-  <div id="authScreen" class="auth-screen">
+<div id="authScreen" class="auth-screen">
 
-    <div class="auth-card">
+  <div class="auth-card">
 
-      <div class="auth-logo">E</div>
+    <div class="auth-logo">E</div>
 
-      <h1>ELGHO AI</h1>
+    <h1>ELGHO AI</h1>
 
-      <p class="auth-subtitle">
-        AI Assistant milikmu.
+    <p class="auth-subtitle">
+      AI Assistant milikmu.
+    </p>
+
+    <!-- LOGIN -->
+
+    <div id="loginForm">
+
+      <h2>Selamat datang 👋</h2>
+
+      <p class="form-info">
+        Masuk ke akun ELGHO AI kamu.
       </p>
 
-
-      <!-- LOGIN -->
-
-      <div id="loginForm">
-
-        <h2>Selamat datang 👋</h2>
-
-        <p class="form-info">
-          Masuk ke akun ELGHO AI.
-        </p>
-
-        <input
-          type="email"
-          id="loginEmail"
-          placeholder="Gmail / Email"
-        >
-
-        <input
-          type="password"
-          id="loginPassword"
-          placeholder="Password"
-        >
-
-        <button
-          type="button"
-          class="auth-button"
-          id="loginButton"
-        >
-          Masuk
-        </button>
-
-        <p class="switch-auth">
-
-          Belum punya akun?
-
-          <button
-            type="button"
-            id="showRegisterButton"
-          >
-            Daftar
-          </button>
-
-        </p>
-
-      </div>
-
-
-      <!-- DAFTAR -->
-
-      <div
-        id="registerForm"
-        class="hidden"
+      <input
+        type="email"
+        id="loginEmail"
+        placeholder="Gmail / Email"
       >
 
-        <h2>Buat akun 🚀</h2>
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Password"
+      >
 
-        <p class="form-info">
-          Daftar akun ELGHO AI.
-        </p>
+      <button
+        type="button"
+        class="auth-button"
+        onclick="login()"
+      >
+        Masuk
+      </button>
 
-        <input
-          type="text"
-          id="registerName"
-          placeholder="Nama"
-        >
-
-        <input
-          type="email"
-          id="registerEmail"
-          placeholder="Gmail / Email"
-        >
-
-        <input
-          type="password"
-          id="registerPassword"
-          placeholder="Password"
-        >
-
-        <input
-          type="password"
-          id="registerPassword2"
-          placeholder="Konfirmasi Password"
-        >
-
+      <p class="switch-auth">
+        Belum punya akun?
         <button
           type="button"
-          class="auth-button"
-          id="registerButton"
+          onclick="showRegister()"
         >
           Daftar
         </button>
+      </p>
 
-        <p class="switch-auth">
+    </div>
 
-          Sudah punya akun?
 
-          <button
-            type="button"
-            id="showLoginButton"
-          >
-            Masuk
-          </button>
+    <!-- REGISTER -->
 
-        </p>
+    <div
+      id="registerForm"
+      class="hidden"
+    >
 
-      </div>
+      <h2>Buat akun 🚀</h2>
+
+      <p class="form-info">
+        Daftar untuk mulai menggunakan ELGHO AI.
+      </p>
+
+      <input
+        type="text"
+        id="registerName"
+        placeholder="Nama"
+      >
+
+      <input
+        type="email"
+        id="registerEmail"
+        placeholder="Gmail / Email"
+      >
+
+      <input
+        type="password"
+        id="registerPassword"
+        placeholder="Password"
+      >
+
+      <input
+        type="password"
+        id="registerPassword2"
+        placeholder="Konfirmasi Password"
+      >
+
+      <button
+        type="button"
+        class="auth-button"
+        onclick="register()"
+      >
+        Daftar
+      </button>
+
+      <p class="switch-auth">
+        Sudah punya akun?
+        <button
+          type="button"
+          onclick="showLogin()"
+        >
+          Masuk
+        </button>
+      </p>
 
     </div>
 
   </div>
 
+</div>
 
-  <!-- BERANDA -->
 
-  <div
-    id="appScreen"
-    class="hidden"
-  >
+<!-- =========================
+     APP SCREEN
+========================= -->
 
-    <div class="app">
+<div
+  id="appScreen"
+  class="hidden"
+>
 
-      <aside class="sidebar">
+  <div class="app">
 
-        <div class="brand">
+    <!-- SIDEBAR -->
 
-          <div class="brand-logo">
-            E
+    <aside
+      class="sidebar"
+      id="sidebar"
+    >
+
+      <div class="brand">
+
+        <div class="brand-logo">
+          E
+        </div>
+
+        <div>
+
+          <h2>ELGHO AI</h2>
+
+          <span>
+            AI Assistant
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="new-chat"
+        onclick="openPage('chat')"
+      >
+        ＋ Chat Baru
+      </button>
+
+
+      <nav>
+
+        <button
+          class="nav-item active"
+          onclick="openPage('home', this)"
+        >
+          🏠
+          <span>Beranda</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          onclick="openPage('chat', this)"
+        >
+          💬
+          <span>Chat AI</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          onclick="openPage('image', this)"
+        >
+          🖼️
+          <span>Generate Gambar</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          onclick="openPage('video', this)"
+        >
+          🎬
+          <span>Generate Video</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          onclick="openPage('website', this)"
+        >
+          🌐
+          <span>Buat Website</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          onclick="openPage('app', this)"
+        >
+          📱
+          <span>Buat Aplikasi</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          onclick="openPage('history', this)"
+        >
+          🕘
+          <span>Riwayat</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          onclick="openPage('profile', this)"
+        >
+          👤
+          <span>Profil</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          onclick="openPage('settings', this)"
+        >
+          ⚙️
+          <span>Pengaturan</span>
+        </button>
+
+      </nav>
+
+
+      <!-- USER -->
+
+      <div class="sidebar-bottom">
+
+        <div class="user-box">
+
+          <div
+            class="avatar"
+            id="sidebarAvatar"
+          >
+            L
           </div>
 
           <div>
 
-            <h2>ELGHO AI</h2>
+            <strong id="sidebarName">
+              Pengguna
+            </strong>
 
-            <span>
-              AI Assistant
-            </span>
+            <small>
+              Free Plan
+            </small>
 
           </div>
 
         </div>
 
 
-        <nav>
+        <button
+          class="logout-button"
+          onclick="logout()"
+        >
+          Keluar
+        </button>
+
+      </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+      <header class="topbar">
+
+        <button
+          class="menu-btn"
+          onclick="toggleSidebar()"
+        >
+          ☰
+        </button>
+
+        <div class="mobile-logo">
+          <strong>
+            ELGHO AI
+          </strong>
+        </div>
+
+        <button
+          class="theme-btn"
+          onclick="toggleTheme()"
+        >
+          ☾
+        </button>
+
+      </header>
+
+
+      <!-- =========================
+           HOME
+      ========================= -->
+
+      <section
+        class="page active"
+        id="home"
+      >
+
+        <div class="hero">
+
+          <div class="hero-badge">
+            ✦ ELGHO AI
+          </div>
+
+          <h1>
+
+            Halo,
+            <span id="welcomeName">
+              Pengguna
+            </span>
+            👋
+
+            <br>
+
+            Apa yang ingin kamu buat?
+
+          </h1>
+
+
+          <p>
+
+            Gunakan ELGHO AI untuk belajar,
+            membuat konten, mencari ide,
+            dan berkarya.
+
+          </p>
+
 
           <button
-            class="nav-item active"
+            class="primary-btn"
+            onclick="openPage('chat')"
           >
-            🏠
-            <span>Beranda</span>
+            Mulai Chat →
           </button>
+
+        </div>
+
+
+        <div class="quick-grid">
 
           <button
-            class="nav-item"
-            id="chatButton"
+            onclick="openPage('chat')"
           >
-            💬
-            <span>Chat AI</span>
+
+            <span>💬</span>
+
+            <strong>
+              Chat dengan AI
+            </strong>
+
+            <small>
+              Tanya apa saja
+            </small>
+
           </button>
+
 
           <button
-            class="nav-item"
+            onclick="openPage('image')"
           >
-            🖼️
-            <span>Generate Gambar</span>
+
+            <span>🖼️</span>
+
+            <strong>
+              Generate Gambar
+            </strong>
+
+            <small>
+              Buat gambar dari prompt
+            </small>
+
           </button>
+
 
           <button
-            class="nav-item"
+            onclick="openPage('video')"
           >
-            🎬
-            <span>Generate Video</span>
+
+            <span>🎬</span>
+
+            <strong>
+              Generate Video
+            </strong>
+
+            <small>
+              Buat video dengan AI
+            </small>
+
           </button>
 
-        </nav>
+
+          <button
+            onclick="openPage('website')"
+          >
+
+            <span>🌐</span>
+
+            <strong>
+              Buat Website
+            </strong>
+
+            <small>
+              Website dari prompt
+            </small>
+
+          </button>
 
 
-        <div class="sidebar-bottom">
+          <button
+            onclick="openPage('app')"
+          >
 
-          <div class="user-box">
+            <span>📱</span>
 
-            <div
-              class="avatar"
-              id="userAvatar"
-            >
-              L
+            <strong>
+              Buat Aplikasi
+            </strong>
+
+            <small>
+              Aplikasi dari ide kamu
+            </small>
+
+          </button>
+
+
+          <button
+            onclick="openPage('history')"
+          >
+
+            <span>🕘</span>
+
+            <strong>
+              Riwayat
+            </strong>
+
+            <small>
+              Lihat aktivitas kamu
+            </small>
+
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           CHAT
+      ========================= -->
+
+      <section
+        class="page"
+        id="chat"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            💬 Chat AI
+          </h1>
+
+          <p>
+            Berbicara dengan ELGHO AI.
+          </p>
+
+        </div>
+
+
+        <div class="chat-container">
+
+          <div
+            class="chat-messages"
+            id="chatMessages"
+          >
+
+            <div class="ai-message">
+
+              <div class="message-avatar">
+                E
+              </div>
+
+              <div>
+
+                <strong>
+                  ELGHO AI
+                </strong>
+
+                <p>
+                  Halo! Saya ELGHO AI.
+                  Ada yang bisa saya bantu?
+                </p>
+
+              </div>
+
             </div>
+
+          </div>
+
+
+          <div class="chat-input">
+
+            <textarea
+              id="messageInput"
+              placeholder="Tulis pesan untuk ELGHO AI..."
+            ></textarea>
+
+            <button
+              onclick="sendMessage()"
+            >
+              ➤
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           IMAGE
+      ========================= -->
+
+      <section
+        class="page"
+        id="image"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            🖼️ Generate Gambar
+          </h1>
+
+          <p>
+            Buat gambar menggunakan prompt.
+          </p>
+
+        </div>
+
+
+        <div class="generator-card">
+
+          <textarea
+            id="imagePrompt"
+            placeholder="Contoh: Kota futuristik Indonesia pada malam hari..."
+          ></textarea>
+
+
+          <div class="generator-options">
+
+            <select id="imageQuality">
+
+              <option>
+                HD
+              </option>
+
+              <option>
+                Standard
+              </option>
+
+            </select>
+
+
+            <button
+              class="primary-btn"
+              onclick="generateImage()"
+            >
+              ✨ Generate
+            </button>
+
+          </div>
+
+
+          <div
+            class="empty-result"
+            id="imageResult"
+          >
+
+            <span>
+              🖼️
+            </span>
+
+            <p>
+              Hasil gambar akan muncul di sini.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           VIDEO
+      ========================= -->
+
+      <section
+        class="page"
+        id="video"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            🎬 Generate Video
+          </h1>
+
+          <p>
+            Buat video dari deskripsi.
+          </p>
+
+        </div>
+
+
+        <div class="generator-card">
+
+          <textarea
+            id="videoPrompt"
+            placeholder="Deskripsikan video yang ingin dibuat..."
+          ></textarea>
+
+
+          <div class="generator-options">
+
+            <select id="videoDuration">
+
+              <option>
+                10 detik
+              </option>
+
+              <option>
+                30 detik
+              </option>
+
+              <option>
+                60 detik
+              </option>
+
+            </select>
+
+
+            <button
+              class="primary-btn"
+              onclick="generateVideo()"
+            >
+              🎬 Generate
+            </button>
+
+          </div>
+
+
+          <div
+            class="empty-result"
+            id="videoResult"
+          >
+
+            <span>
+              🎬
+            </span>
+
+            <p>
+              Hasil video akan muncul di sini.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           WEBSITE
+      ========================= -->
+
+      <section
+        class="page"
+        id="website"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            🌐 Buat Website
+          </h1>
+
+          <p>
+            Ubah ide menjadi website.
+          </p>
+
+        </div>
+
+
+        <div class="generator-card">
+
+          <textarea
+            id="websitePrompt"
+            placeholder="Contoh: Buat website toko pakaian modern..."
+          ></textarea>
+
+
+          <button
+            class="primary-btn"
+            onclick="createWebsite()"
+          >
+            🚀 Buat Website
+          </button>
+
+
+          <div
+            class="empty-result"
+            id="websiteResult"
+          >
+
+            <span>
+              🌐
+            </span>
+
+            <p>
+              Website yang dibuat AI
+              akan muncul di sini.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           APP
+      ========================= -->
+
+      <section
+        class="page"
+        id="app"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            📱 Buat Aplikasi
+          </h1>
+
+          <p>
+            Buat aplikasi dari ide kamu.
+          </p>
+
+        </div>
+
+
+        <div class="generator-card">
+
+          <textarea
+            id="appPrompt"
+            placeholder="Contoh: Buat aplikasi belajar bahasa..."
+          ></textarea>
+
+
+          <button
+            class="primary-btn"
+            onclick="createApp()"
+          >
+            📱 Buat Aplikasi
+          </button>
+
+
+          <div
+            class="empty-result"
+            id="appResult"
+          >
+
+            <span>
+              📱
+            </span>
+
+            <p>
+              Aplikasi yang dibuat AI
+              akan muncul di sini.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           HISTORY
+      ========================= -->
+
+      <section
+        class="page"
+        id="history"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            🕘 Riwayat
+          </h1>
+
+          <p>
+            Aktivitas kamu akan tersimpan di sini.
+          </p>
+
+        </div>
+
+
+        <div class="empty-state">
+
+          <span>
+            🕘
+          </span>
+
+          <h3>
+            Belum ada riwayat
+          </h3>
+
+          <p>
+            Mulai menggunakan ELGHO AI
+            untuk melihat aktivitas.
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           PROFILE
+      ========================= -->
+
+      <section
+        class="page"
+        id="profile"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            👤 Profil
+          </h1>
+
+          <p>
+            Kelola informasi akun kamu.
+          </p>
+
+        </div>
+
+
+        <div class="profile-card">
+
+          <div
+            class="profile-avatar"
+            id="profileAvatar"
+          >
+            L
+          </div>
+
+
+          <h2 id="profileName">
+            Pengguna
+          </h2>
+
+
+          <p id="profileEmail">
+            email@example.com
+          </p>
+
+
+          <div class="plan-badge">
+            FREE PLAN
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           SETTINGS
+      ========================= -->
+
+      <section
+        class="page"
+        id="settings"
+      >
+
+        <div class="page-header">
+
+          <h1>
+            ⚙️ Pengaturan
+          </h1>
+
+          <p>
+            Atur pengalaman ELGHO AI kamu.
+          </p>
+
+        </div>
+
+
+        <div class="settings-list">
+
+          <div class="setting">
 
             <div>
 
-              <strong id="userName">
-                Pengguna
+              <strong>
+                Tampilan
+              </strong>
+
+              <small>
+                Mode terang / gelap
+              </small>
+
+            </div>
+
+
+            <button
+              onclick="toggleTheme()"
+            >
+              Ubah
+            </button>
+
+          </div>
+
+
+          <div class="setting">
+
+            <div>
+
+              <strong>
+                Bahasa
+              </strong>
+
+              <small>
+                Bahasa Indonesia
+              </small>
+
+            </div>
+
+
+            <button>
+              Indonesia
+            </button>
+
+          </div>
+
+
+          <div class="setting">
+
+            <div>
+
+              <strong>
+                Akun
               </strong>
 
               <small>
@@ -224,132 +1008,27 @@
 
             </div>
 
+
+            <button
+              onclick="openPage('profile')"
+            >
+              Profil
+            </button>
+
           </div>
-
-
-          <button
-            class="logout-button"
-            id="logoutButton"
-          >
-            Keluar
-          </button>
 
         </div>
 
-      </aside>
+      </section>
 
-
-      <main class="main">
-
-        <header class="topbar">
-
-          <strong>
-            ELGHO AI
-          </strong>
-
-        </header>
-
-
-        <section class="page active">
-
-          <div class="hero">
-
-            <div class="hero-badge">
-              ✦ ELGHO AI
-            </div>
-
-            <h1>
-
-              Halo,
-              <span id="welcomeName">
-                Pengguna
-              </span>
-              👋
-
-              <br>
-
-              Selamat datang di ELGHO AI
-
-            </h1>
-
-
-            <p>
-
-              Platform AI milikmu sendiri.
-
-            </p>
-
-
-            <button
-              class="primary-btn"
-              id="startChatButton"
-            >
-
-              Mulai Chat →
-
-            </button>
-
-          </div>
-
-
-          <div class="quick-grid">
-
-            <button>
-
-              <span>💬</span>
-
-              <strong>
-                Chat dengan AI
-              </strong>
-
-              <small>
-                Tanya apa saja
-              </small>
-
-            </button>
-
-
-            <button>
-
-              <span>🖼️</span>
-
-              <strong>
-                Generate Gambar
-              </strong>
-
-              <small>
-                Buat gambar dengan AI
-              </small>
-
-            </button>
-
-
-            <button>
-
-              <span>🎬</span>
-
-              <strong>
-                Generate Video
-              </strong>
-
-              <small>
-                Buat video dengan AI
-              </small>
-
-            </button>
-
-          </div>
-
-        </section>
-
-      </main>
-
-    </div>
+    </main>
 
   </div>
 
+</div>
 
-  <script src="script.js"></script>
+
+<script src="script.js"></script>
 
 </body>
-</html>
+              </html>
