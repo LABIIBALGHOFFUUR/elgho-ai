@@ -1,23 +1,5 @@
 /* =========================
-   SUPABASE CONFIG
-========================= */
-
-const SUPABASE_URL =
-  "https://jsdnbjbxkmouuvvzobad.supabase.co/rest/v1/";
-
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_aTjRYOJHfeZWPDf3oKU-2Q_wbHrfMMX";
-
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
-
-
-/* =========================
-   AUTH FORM
+   AUTH - LOCAL PROTOTYPE
 ========================= */
 
 function showRegister() {
@@ -47,10 +29,10 @@ function showLogin() {
 
 
 /* =========================
-   REGISTER EMAIL
+   REGISTER
 ========================= */
 
-async function register() {
+function register() {
 
   const name =
     document
@@ -62,7 +44,8 @@ async function register() {
     document
       .getElementById("registerEmail")
       .value
-      .trim();
+      .trim()
+      .toLowerCase();
 
   const password =
     document
@@ -91,7 +74,22 @@ async function register() {
   }
 
 
-  if (password.length < 6) {
+  if (
+    !email.includes("@")
+  ) {
+
+    alert(
+      "Masukkan alamat email yang valid."
+    );
+
+    return;
+
+  }
+
+
+  if (
+    password.length < 6
+  ) {
 
     alert(
       "Password minimal 6 karakter."
@@ -102,7 +100,9 @@ async function register() {
   }
 
 
-  if (password !== password2) {
+  if (
+    password !== password2
+  ) {
 
     alert(
       "Konfirmasi password tidak sama."
@@ -113,78 +113,82 @@ async function register() {
   }
 
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.signUp({
-
-      email: email,
-
-      password: password,
-
-      options: {
-
-        data: {
-          full_name: name
-        }
-
-      }
-
-    });
-
-
-  if (error) {
-
-    alert(
-      "Pendaftaran gagal:\n\n" +
-      error.message
+  const existingUser =
+    localStorage.getItem(
+      "elghoUser"
     );
 
-    console.error(error);
 
-    return;
+  if (existingUser) {
+
+    const oldUser =
+      JSON.parse(existingUser);
+
+
+    if (
+      oldUser.email === email
+    ) {
+
+      alert(
+        "Email tersebut sudah terdaftar."
+      );
+
+      return;
+
+    }
 
   }
 
 
-  if (data.session) {
+  const user = {
 
-    await loadUserData(
-      data.user
-    );
+    name: name,
 
-    showApp();
+    email: email,
 
-  } else {
+    password: password
 
-    alert(
-      "Pendaftaran berhasil!\n\n" +
-      "Silakan cek email untuk verifikasi akun."
-    );
+  };
 
-    document
-      .getElementById("loginEmail")
-      .value = email;
 
-    showLogin();
+  localStorage.setItem(
+    "elghoUser",
+    JSON.stringify(user)
+  );
 
-  }
+
+  alert(
+    "Pendaftaran berhasil! Silakan masuk."
+  );
+
+
+  document
+    .getElementById("loginEmail")
+    .value = email;
+
+
+  document
+    .getElementById("loginPassword")
+    .value = "";
+
+
+  showLogin();
 
 }
 
 
 /* =========================
-   LOGIN EMAIL
+   LOGIN
 ========================= */
 
-async function login() {
+function login() {
 
   const email =
     document
       .getElementById("loginEmail")
       .value
-      .trim();
+      .trim()
+      .toLowerCase();
 
   const password =
     document
@@ -203,37 +207,48 @@ async function login() {
   }
 
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth
-      .signInWithPassword({
-
-        email: email,
-
-        password: password
-
-      });
-
-
-  if (error) {
-
-    alert(
-      "Login gagal:\n\n" +
-      error.message
+  const savedUser =
+    localStorage.getItem(
+      "elghoUser"
     );
 
-    console.error(error);
+
+  if (!savedUser) {
+
+    alert(
+      "Akun belum ditemukan. Silakan daftar terlebih dahulu."
+    );
 
     return;
 
   }
 
 
-  await loadUserData(
-    data.user
+  const user =
+    JSON.parse(savedUser);
+
+
+  if (
+    email !== user.email ||
+    password !== user.password
+  ) {
+
+    alert(
+      "Email atau password salah."
+    );
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    "elghoLoggedIn",
+    "true"
   );
+
+
+  loadUserData();
 
   showApp();
 
@@ -241,69 +256,48 @@ async function login() {
 
 
 /* =========================
-   GOOGLE LOGIN
+   LOGOUT
 ========================= */
 
-async function loginWithGoogle() {
+function logout() {
 
-  try {
-
-    const {
-      error
-    } =
-      await supabaseClient.auth
-        .signInWithOAuth({
-
-          provider: "google",
-
-          options: {
-
-            redirectTo:
-              window.location.origin
-
-          }
-
-        });
+  localStorage.removeItem(
+    "elghoLoggedIn"
+  );
 
 
-    if (error) {
+  document
+    .getElementById("appScreen")
+    .classList.add("hidden");
 
-      alert(
-        "Google Login gagal:\n\n" +
-        error.message
-      );
 
-      console.error(error);
+  document
+    .getElementById("authScreen")
+    .classList.remove("hidden");
 
-    }
 
-  } catch (error) {
-
-    console.error(error);
-
-    alert(
-      "Terjadi kesalahan saat membuka Google Login."
-    );
-
-  }
+  showLogin();
 
 }
 
 
 /* =========================
-   LOAD USER
+   USER DATA
 ========================= */
 
-async function loadUserData(user) {
+function loadUserData() {
 
-  if (!user) return;
+  const savedUser =
+    localStorage.getItem(
+      "elghoUser"
+    );
 
 
-  const name =
-    user.user_metadata?.full_name ||
-    user.user_metadata?.name ||
-    user.email?.split("@")[0] ||
-    "Pengguna";
+  if (!savedUser) return;
+
+
+  const user =
+    JSON.parse(savedUser);
 
 
   const welcomeName =
@@ -326,6 +320,33 @@ async function loadUserData(user) {
       "profileEmail"
     );
 
+
+  if (welcomeName)
+    welcomeName.textContent =
+      user.name;
+
+
+  if (sidebarName)
+    sidebarName.textContent =
+      user.name;
+
+
+  if (profileName)
+    profileName.textContent =
+      user.name;
+
+
+  if (profileEmail)
+    profileEmail.textContent =
+      user.email;
+
+
+  const firstLetter =
+    user.name
+      .charAt(0)
+      .toUpperCase();
+
+
   const sidebarAvatar =
     document.getElementById(
       "sidebarAvatar"
@@ -337,77 +358,14 @@ async function loadUserData(user) {
     );
 
 
-  if (welcomeName)
-    welcomeName.textContent = name;
-
-
-  if (sidebarName)
-    sidebarName.textContent = name;
-
-
-  if (profileName)
-    profileName.textContent = name;
-
-
-  if (profileEmail)
-    profileEmail.textContent =
-      user.email || "";
-
-
-  const initial =
-    name
-      .charAt(0)
-      .toUpperCase();
-
-
   if (sidebarAvatar)
     sidebarAvatar.textContent =
-      initial;
+      firstLetter;
 
 
   if (profileAvatar)
     profileAvatar.textContent =
-      initial;
-
-}
-
-
-/* =========================
-   LOGOUT
-========================= */
-
-async function logout() {
-
-  const {
-    error
-  } =
-    await supabaseClient.auth
-      .signOut();
-
-
-  if (error) {
-
-    alert(
-      "Gagal keluar:\n\n" +
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  document
-    .getElementById("appScreen")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("authScreen")
-    .classList.remove("hidden");
-
-
-  showLogin();
+      firstLetter;
 
 }
 
@@ -529,7 +487,9 @@ function closeSidebar() {
     );
 
 
-  if (window.innerWidth <= 800) {
+  if (
+    window.innerWidth <= 800
+  ) {
 
     sidebar.classList.remove(
       "show"
@@ -541,7 +501,7 @@ function closeSidebar() {
 
 
 /* =========================
-   THEME
+   DARK MODE
 ========================= */
 
 function toggleTheme() {
@@ -653,9 +613,10 @@ function sendMessage() {
       <strong>ELGHO AI</strong>
 
       <p>
-        Sistem AI belum terhubung.
-        Backend AI akan kita buat
-        pada tahap berikutnya.
+        Sistem AI belum terhubung
+        ke model AI.
+        Kita akan membuat backend
+        ELGHO pada tahap berikutnya.
       </p>
 
     </div>
@@ -680,14 +641,23 @@ function sendMessage() {
 
 function getUserInitial() {
 
-  const avatar =
-    document.getElementById(
-      "sidebarAvatar"
+  const savedUser =
+    localStorage.getItem(
+      "elghoUser"
     );
 
 
-  return avatar?.textContent ||
-    "L";
+  if (!savedUser)
+    return "L";
+
+
+  const user =
+    JSON.parse(savedUser);
+
+
+  return user.name
+    .charAt(0)
+    .toUpperCase();
 
 }
 
@@ -709,104 +679,45 @@ function escapeHTML(text) {
 
 
 /* =========================
-   SESSION
-========================= */
-
-async function checkSession() {
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth
-      .getSession();
-
-
-  if (error) {
-
-    console.error(error);
-
-    return;
-
-  }
-
-
-  if (
-    data.session &&
-    data.session.user
-  ) {
-
-    await loadUserData(
-      data.session.user
-    );
-
-    showApp();
-
-  } else {
-
-    document
-      .getElementById(
-        "authScreen"
-      )
-      .classList
-      .remove("hidden");
-
-
-    document
-      .getElementById(
-        "appScreen"
-      )
-      .classList
-      .add("hidden");
-
-  }
-
-}
-
-
-/* =========================
-   AUTH STATE
-========================= */
-
-supabaseClient.auth
-  .onAuthStateChange(
-    async (
-      event,
-      session
-    ) => {
-
-      console.log(
-        "Auth:",
-        event
-      );
-
-
-      if (
-        session &&
-        session.user
-      ) {
-
-        await loadUserData(
-          session.user
-        );
-
-        showApp();
-
-      }
-
-    }
-  );
-
-
-/* =========================
-   START
+   STARTUP
 ========================= */
 
 window.addEventListener(
   "load",
   () => {
 
-    checkSession();
+    const loggedIn =
+      localStorage.getItem(
+        "elghoLoggedIn"
+      );
+
+
+    if (
+      loggedIn === "true"
+    ) {
+
+      loadUserData();
+
+      showApp();
+
+    } else {
+
+      document
+        .getElementById(
+          "authScreen"
+        )
+        .classList
+        .remove("hidden");
+
+
+      document
+        .getElementById(
+          "appScreen"
+        )
+        .classList
+        .add("hidden");
+
+    }
 
   }
 );
