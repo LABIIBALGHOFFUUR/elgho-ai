@@ -24,7 +24,16 @@
 
       <h2>Selamat datang 👋</h2>
       <p class="form-info">Masuk ke akun ELGHO AI kamu.</p>
+      
+<button class="google-button" onclick="loginWithGoogle()">
+  <span>G</span>
+  Lanjutkan dengan Google
+</button>
 
+<div class="divider">
+  <span>atau</span>
+</div>
+      
       <input
         type="email"
         id="loginEmail"
@@ -55,6 +64,15 @@
       <h2>Buat akun 🚀</h2>
       <p class="form-info">Daftar untuk mulai menggunakan ELGHO AI.</p>
 
+    <button class="google-button" onclick="loginWithGoogle()">
+  <span>G</span>
+  Daftar dengan Google
+</button>
+
+<div class="divider">
+  <span>atau</span>
+</div>
+      
       <input
         type="text"
         id="registerName"
@@ -581,7 +599,7 @@
 
 </div>
 
-
+<<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 
 </body>
